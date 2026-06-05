@@ -9,6 +9,7 @@ import HeroEnvironment from './HeroEnvironment'
 export default function SceneContent() {
   const charRef      = useRef()
   const fadeGroupRef = useRef()
+  const fadeMaterialsRef = useRef([])
   const scrollY      = useRef(0) // Track raw scrollY value
 
   const typing  = useGLTF('/typing.glb')
@@ -48,6 +49,7 @@ export default function SceneContent() {
       talkingActionRef.current = mixer.clipAction(talkingClip, charRef.current)
     }
 
+    const fadeMats = []
     if (fadeGroupRef.current) {
       fadeGroupRef.current.traverse((child) => {
         if (child.isMesh && child.material) {
@@ -55,25 +57,18 @@ export default function SceneContent() {
           child.material.transparent = true
           child.castShadow = true
           child.receiveShadow = true
+          fadeMats.push(child.material)
         }
       })
     }
+    fadeMaterialsRef.current = fadeMats
+
+    // Only traverse character once to enable shadows
     if (charRef.current) {
       charRef.current.traverse((child) => {
         if (child.isMesh && child.material) {
-          child.material = child.material.clone()
-          child.material.transparent = true
           child.castShadow = true
           child.receiveShadow = true
-        }
-      })
-    }
-    // Also make character meshes transparent for fading
-    if (charRef.current) {
-      charRef.current.traverse((child) => {
-        if (child.isMesh && child.material) {
-          child.material = child.material.clone()
-          child.material.transparent = true
         }
       })
     }
@@ -99,26 +94,13 @@ export default function SceneContent() {
     charRef.current.scale.setScalar(THREE.MathUtils.lerp(heroScale, aboutScale, t))
     charRef.current.rotation.y = THREE.MathUtils.lerp(heroRotation, aboutRotation, t)
 
-    // Fade out desk + pot
-    if (fadeGroupRef.current) {
+    // Fade out desk + pot using cached materials
+    if (fadeGroupRef.current && fadeMaterialsRef.current.length > 0) {
       const opacity = THREE.MathUtils.lerp(1, 0, t)
-      fadeGroupRef.current.traverse((child) => {
-        if (child.isMesh && child.material) {
-          child.material.opacity = opacity
-        }
+      fadeMaterialsRef.current.forEach((mat) => {
+        mat.opacity = opacity
       })
       fadeGroupRef.current.visible = opacity > 0.01
-    }
-
-    // Keep character and chair fully visible (no opacity change)
-    if (charRef.current) {
-      // Ensure opacity stays at 1
-      charRef.current.traverse((child) => {
-        if (child.isMesh && child.material) {
-          child.material.opacity = 1
-        }
-      })
-      charRef.current.visible = true
     }
 
     // Animation crossfade
