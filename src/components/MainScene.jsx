@@ -1,37 +1,43 @@
 import { Canvas } from "@react-three/fiber";
 import { Environment, ContactShadows } from "@react-three/drei";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useCallback } from "react";
 import SceneContent from "./SceneContent";
 import SceneBackground from "./SceneBackground";
 import LightRays from "./LightRays";
 import TiltedCard from "./TiltedCard";
+import SceneLoader from "./SceneLoader";
 import "./MainScene.css";
 
-export default function MainScene() {
+export default function MainScene({ onProgress, onLoaded }) {
   const aboutCardsRef = useRef(null);
+  const handleProgress = useCallback((p) => onProgress?.(p), [onProgress])
+  const handleLoaded   = useCallback(() => onLoaded?.(), [onLoaded])
 
   // Fade in about cards as user scrolls into the About section
   useEffect(() => {
+    let rafId = null
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const height = window.innerHeight;
-      // t goes 0→1 as user scrolls (completes at 75% of viewport)
-      const t = Math.min(scrollY / (height * 0.75), 1);
-      if (aboutCardsRef.current) {
-        const cards = aboutCardsRef.current.querySelectorAll(".about-card-wrapper");
-        cards.forEach((card) => {
-          card.style.opacity = t;
-        });
-        const lightfallBg = document.querySelector(".lightfall-bg");
-        if (lightfallBg) {
-          lightfallBg.style.opacity = t;
+      if (rafId) return
+      rafId = requestAnimationFrame(() => {
+        rafId = null
+        const scrollY = window.scrollY
+        const height = window.innerHeight
+        const t = Math.min(scrollY / (height * 0.75), 1)
+        if (aboutCardsRef.current) {
+          const cards = aboutCardsRef.current.querySelectorAll('.about-card-wrapper')
+          cards.forEach((card) => { card.style.opacity = t })
+          const lightfallBg = document.querySelector('.lightfall-bg')
+          if (lightfallBg) lightfallBg.style.opacity = t
         }
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+      })
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [])
 
   return (
     <>
@@ -50,8 +56,8 @@ export default function MainScene() {
         <div className="about-cards">
           <div className="about-card-wrapper name-card">
             <TiltedCard
-              containerWidth="180px"
-              containerHeight="90px"
+              containerWidth="220px"
+              containerHeight="110px"
               imageWidth="100%"
               imageHeight="100%"
               showMobileWarning={false}
@@ -68,8 +74,8 @@ export default function MainScene() {
 
           <div className="about-card-wrapper bio-card">
             <TiltedCard
-              containerWidth="230px"
-              containerHeight="140px"
+              containerWidth="280px"
+              containerHeight="170px"
               imageWidth="100%"
               imageHeight="100%"
               showMobileWarning={false}
@@ -88,8 +94,8 @@ export default function MainScene() {
 
           <div className="about-card-wrapper skills-card">
             <TiltedCard
-              containerWidth="200px"
-              containerHeight="220px"
+              containerWidth="240px"
+              containerHeight="260px"
               imageWidth="100%"
               imageHeight="100%"
               showMobileWarning={false}
@@ -136,9 +142,12 @@ export default function MainScene() {
         <Canvas
           camera={{ position: [0, 3.5, 6], fov: 42 }}
           shadows
-          gl={{ logarithmicDepthBuffer: true, antialias: true, alpha: true }}
+          dpr={[1, 1.5]}
+          performance={{ min: 0.5 }}
+          gl={{ antialias: true, alpha: true }}
         >
           <Suspense fallback={null}>
+            <SceneLoader onProgress={handleProgress} onLoaded={handleLoaded} />
             <SceneBackground />
             <SceneContent />
             {/* Ambient contact shadows for soft ambient occlusion */}
@@ -146,8 +155,8 @@ export default function MainScene() {
               position={[0, -0.5, 0]}
               opacity={0.08}
               scale={20}
-              blur={2}
-              resolution={1024}
+              blur={2.5}
+              resolution={256}
               far={10}
             />
 

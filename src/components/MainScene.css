@@ -6,6 +6,7 @@
   height: 100vh;
   z-index: 10;
   pointer-events: none;
+  will-change: transform;
 }
 
 .canvas-sticky-wrapper canvas {
@@ -22,6 +23,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  will-change: opacity;
+  transform: translateZ(0);
 }
 
 .hero-title {
@@ -32,12 +35,12 @@
 }
 
 .hero-name-line {
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  font-size: clamp(4rem, 8vw, 8rem);
-  font-weight: 900;
+  font-family: 'Urbanist', 'Pro Font Windows', monospace;
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  font-weight: 600;
   color: #2a2a2a; /* Dark charcoal/almost black */
   line-height: 1;
-  letter-spacing: -2px;
+  letter-spacing: 1.5px;
 }
 
 .hero-badge {
@@ -77,6 +80,8 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease-out;
+  will-change: opacity;
+  transform: translateZ(0);
 }
 
 .about-card-wrapper {
@@ -84,6 +89,8 @@
   opacity: 0;
   transition: opacity 0.3s ease-out;
   pointer-events: auto;
+  will-change: opacity;
+  transform: translateZ(0);
 }
 
 .glass-panel {
@@ -93,23 +100,25 @@
   border: 1px solid rgba(0, 200, 255, 0.4);
   border-radius: 12px;
   padding: 1rem 1.4rem;
-  color: #c0f0ff;
+  color: #fff;
   backdrop-filter: blur(8px);
   box-shadow: 0 0 20px rgba(0, 200, 255, 0.15);
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Pro Font Windows', monospace;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
 }
 
 .name-card { top: 20%; left: 18%; }
-.name-card h3 { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
-.name-card p { font-size: 0.85rem; color: #80d8ff; }
+.name-card h3 { font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+.name-card p { font-size: 1.1rem; color: #fff; }
 
-.bio-card { top: 45%; left: 5%; max-width: 230px; font-size: 0.88rem; line-height: 1.6; color: #a0d8ef; }
+.bio-card { top: 45%; left: 5%; max-width: 280px; font-size: 1.1rem; line-height: 1.6; color: #fff; }
 
 .skills-card { top: 28%; right: 6%; min-width: 200px; }
-.skills-card h4 { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.6rem; }
+.skills-card h4 { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 0.6rem; }
 .skills-card ul { list-style: none; padding: 0; margin: 0; }
-.skills-card ul li { font-size: 0.85rem; color: #a0d8ef; padding: 0.2rem 0; }
+.skills-card ul li { font-size: 1.1rem; color: #fff; padding: 0.2rem 0; }
 .skills-card ul li::before { content: '• '; color: #00c8ff; }
