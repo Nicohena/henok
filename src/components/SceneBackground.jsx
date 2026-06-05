@@ -2,8 +2,6 @@ import { useRef, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-const heroColor = new THREE.Color('#f5f0e8')
-
 export default function SceneBackground() {
   const platformRef  = useRef()
   const wireframeRef = useRef()
@@ -13,12 +11,12 @@ export default function SceneBackground() {
   const shardRef1    = useRef()
   const shardRef2    = useRef()
   const shardRef3    = useRef()
-  const scrollY     = useRef(0)
+  const scrollY      = useRef(0)
+  const frameCount   = useRef(0)
+  const prevT        = useRef(-1)
 
   useEffect(() => {
-    const onScroll = () => {
-      scrollY.current = window.scrollY
-    }
+    const onScroll = () => { scrollY.current = window.scrollY }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -28,34 +26,43 @@ export default function SceneBackground() {
     const height = window.innerHeight
     const t = Math.min(currentY / (height * 0.75), 1)
 
-    // Keep scene background transparent to reveal HTML background transition
-    scene.background = null
+    // Clear background once per value change, not every frame
+    if (scene.background !== null) scene.background = null
 
-    // Hologram platform disc fades in slowly as the user scrolls to the About section (t 0→1)
-    const platformOpacity = t
-    
-    const updateOpacity = (ref, maxOp = 1) => {
-      if (ref.current) {
-        ref.current.material.opacity = platformOpacity * maxOp
-        ref.current.visible = platformOpacity > 0.01
-      }
+    // Skip all work when fully invisible
+    if (t < 0.01) {
+      prevT.current = t
+      return
     }
 
-    updateOpacity(platformRef, 0.9)
-    updateOpacity(wireframeRef, 0.3)
-    updateOpacity(ringRef, 1)
-    updateOpacity(ringRef2, 0.8)
-    updateOpacity(glowRef, 0.4)
-    updateOpacity(shardRef1, 1)
-    updateOpacity(shardRef2, 1)
-    updateOpacity(shardRef3, 1)
+    // Throttle: run opacity updates only every 2nd frame
+    frameCount.current++
+    const isEvenFrame = (frameCount.current % 2) === 0
 
-    // Animations for the sci-fi pedestal
+    if (isEvenFrame || prevT.current !== t) {
+      const updateOpacity = (ref, maxOp = 1) => {
+        if (ref.current) {
+          ref.current.material.opacity = t * maxOp
+          ref.current.visible = t > 0.01
+        }
+      }
+      updateOpacity(platformRef, 0.9)
+      updateOpacity(wireframeRef, 0.3)
+      updateOpacity(ringRef, 1)
+      updateOpacity(ringRef2, 0.8)
+      updateOpacity(glowRef, 0.4)
+      updateOpacity(shardRef1, 1)
+      updateOpacity(shardRef2, 1)
+      updateOpacity(shardRef3, 1)
+      prevT.current = t
+    }
+
+    // Animations — only run when visible
     const time = clock.getElapsedTime()
-    if (ringRef.current) ringRef.current.rotation.z = time * 0.3
-    if (ringRef2.current) ringRef2.current.rotation.z = -time * 0.2
+    if (ringRef.current)      ringRef.current.rotation.z      = time * 0.3
+    if (ringRef2.current)     ringRef2.current.rotation.z     = -time * 0.2
     if (wireframeRef.current) wireframeRef.current.rotation.z = time * 0.05
-    
+
     // Subtle pulsing glow
     if (glowRef.current) {
       const pulse = 1 + Math.sin(time * 2) * 0.05
@@ -92,7 +99,7 @@ export default function SceneBackground() {
         position={[5, 5, 5]} 
         intensity={1} 
         castShadow 
-        shadow-mapSize={[1024, 1024]}
+        shadow-mapSize={[512, 512]}
       >
         <orthographicCamera attach="shadow-camera" args={[-10, 10, 10, -10]} />
       </directionalLight>
@@ -102,31 +109,31 @@ export default function SceneBackground() {
         
         {/* Core solid disc (dark base with slight emissive tint) */}
         <mesh ref={platformRef} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[1.0, 64]} />
+          <circleGeometry args={[1.0, 32]} />
           <meshStandardMaterial color="#0A0F1E" emissive="#5227FF" emissiveIntensity={0.2} transparent opacity={0} roughness={0.2} metalness={0.8} />
         </mesh>
 
         {/* Wireframe overlay on disc (creates a grid-like sci-fi floor) */}
         <mesh ref={wireframeRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.001, 0]}>
-          <circleGeometry args={[1.0, 32]} />
+          <circleGeometry args={[1.0, 16]} />
           <meshBasicMaterial color="#00c8ff" wireframe transparent opacity={0} />
         </mesh>
 
         {/* Inner rotating solid ring (Cyan) */}
         <mesh ref={ringRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
-          <ringGeometry args={[1.05, 1.15, 64]} />
+          <ringGeometry args={[1.05, 1.15, 32]} />
           <meshStandardMaterial color="#00c8ff" emissive="#00c8ff" emissiveIntensity={1.5} transparent opacity={0} />
         </mesh>
 
         {/* Outer rotating dashed/wireframe ring (Orange/Purple combo) */}
         <mesh ref={ringRef2} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.003, 0]}>
-          <ringGeometry args={[1.2, 1.35, 32, 2]} />
+          <ringGeometry args={[1.2, 1.35, 24, 2]} />
           <meshStandardMaterial color="#FF6B2B" emissive="#FF6B2B" emissiveIntensity={1.5} wireframe transparent opacity={0} />
         </mesh>
 
         {/* Outer pulsing atmospheric glow */}
         <mesh ref={glowRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
-          <circleGeometry args={[2.8, 64]} />
+          <circleGeometry args={[2.8, 32]} />
           <meshStandardMaterial color="#5227FF" emissive="#5227FF" emissiveIntensity={0.6} transparent opacity={0} />
         </mesh>
 

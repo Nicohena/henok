@@ -36,7 +36,7 @@ export default function ContactSection() {
                 position={[5, 8, 5]}
                 intensity={1.5}
                 castShadow
-                shadow-mapSize={[1024, 1024]}
+                shadow-mapSize={[512, 512]}
               />
               <directionalLight position={[-5, 3, -5]} intensity={0.4} />
 

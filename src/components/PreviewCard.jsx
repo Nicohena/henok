@@ -1,6 +1,7 @@
+import { memo } from 'react'
 import './PreviewCard.css'
 
-export default function PreviewCard({ project, onSelect }) {
+const PreviewCard = memo(function PreviewCard({ project, onSelect }) {
   return (
     <div className="preview-card" onClick={() => onSelect(project)}>
       {/* Thumbnail */}
@@ -11,6 +12,8 @@ export default function PreviewCard({ project, onSelect }) {
               src={project.thumbnail}
               alt={project.title}
               className="preview-card-image"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>
@@ -28,4 +31,6 @@ export default function PreviewCard({ project, onSelect }) {
       </div>
     </div>
   )
-}
+})
+
+export default PreviewCard

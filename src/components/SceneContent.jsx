@@ -10,7 +10,10 @@ export default function SceneContent() {
   const charRef      = useRef()
   const fadeGroupRef = useRef()
   const fadeMaterialsRef = useRef([])
-  const scrollY      = useRef(0) // Track raw scrollY value
+  const scrollY      = useRef(0)
+  const frameCount   = useRef(0)
+  const cachedHeight = useRef(window.innerHeight)
+  const prevT        = useRef(-1)
 
   const typing  = useGLTF('/typing.glb')
   const talking = useGLTF('/sitting_and_talking.glb')
@@ -29,13 +32,16 @@ export default function SceneContent() {
   const aboutScale    = 2.3
   const aboutRotation = Math.PI * 1.0
 
-  // Listen to native window scroll
+  // Listen to native window scroll + cache innerHeight on resize
   useEffect(() => {
-    const onScroll = () => {
-      scrollY.current = window.scrollY
-    }
+    const onScroll = () => { scrollY.current = window.scrollY }
+    const onResize = () => { cachedHeight.current = window.innerHeight }
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', onResize, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+    }
   }, [])
 
   useEffect(() => {
@@ -77,33 +83,32 @@ export default function SceneContent() {
   useFrame(() => {
     if (!charRef.current) return
     const currentY = scrollY.current
-    const height = window.innerHeight
+    const height   = cachedHeight.current
 
-    // t goes 0→1 over 75% of the Hero to About scroll range (completes at 75vh)
-    const t = Math.min(currentY / (height * 0.75), 1)
+    const t     = Math.min(currentY / (height * 0.75), 1)
+    const outT  = Math.min(Math.max((currentY - height) / height, 0), 1)
+    frameCount.current++
 
-    // outT goes 0→1 as we scroll past the About section (100vh to 200vh)
-    const outT = Math.min(Math.max((currentY - height) / height, 0), 1)
-
-    // Animate character + chair
+    // Always lerp position/scale/rotation (cheap, must be smooth)
     charRef.current.position.x = THREE.MathUtils.lerp(heroX, aboutX, t)
-
-    // Keep character at aboutY position once in About section (no slide-down)
     charRef.current.position.y = THREE.MathUtils.lerp(heroY, aboutY, t)
-
     charRef.current.scale.setScalar(THREE.MathUtils.lerp(heroScale, aboutScale, t))
     charRef.current.rotation.y = THREE.MathUtils.lerp(heroRotation, aboutRotation, t)
 
-    // Fade out desk + pot using cached materials
+    // Fade out desk + pot — only when t is changing or every 3rd frame
     if (fadeGroupRef.current && fadeMaterialsRef.current.length > 0) {
-      const opacity = THREE.MathUtils.lerp(1, 0, t)
-      fadeMaterialsRef.current.forEach((mat) => {
-        mat.opacity = opacity
-      })
-      fadeGroupRef.current.visible = opacity > 0.01
+      if (prevT.current !== t || (frameCount.current % 3) === 0) {
+        const opacity = THREE.MathUtils.lerp(1, 0, t)
+        fadeMaterialsRef.current.forEach((mat) => { mat.opacity = opacity })
+        fadeGroupRef.current.visible = opacity > 0.01
+      }
     }
 
-    // Animation crossfade
+    prevT.current = t
+
+    // Animation crossfade — expensive, throttle to every 10th frame
+    if ((frameCount.current % 10) !== 0) return
+
     const typingAction  = typingActions?.[Object.keys(typingActions  || {})[0]]
     const talkingAction = talkingActionRef.current
 
