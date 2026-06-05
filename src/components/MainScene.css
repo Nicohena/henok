@@ -1,46 +1,76 @@
-.scene-wrapper {
+/* Canvas sticks to viewport while user scrolls through hero + about */
+.canvas-sticky-wrapper {
+  position: sticky;
+  top: 0;
   width: 100vw;
   height: 100vh;
-  background: #f5f0e8;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Lightfall lives at the very bottom — behind canvas */
-.lightfall-container {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+  z-index: 10;
   pointer-events: none;
 }
 
-/* Canvas sits above Lightfall */
-.canvas-container {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-
-.canvas-container canvas {
+.canvas-sticky-wrapper canvas {
   width: 100% !important;
   height: 100% !important;
 }
 
-/* About cards sit above canvas */
-.about-overlay {
+/* Hero text — first viewport, left side */
+.hero-text-overlay {
+  position: absolute;
+  top: 35vh;
+  left: 6vw;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-text-overlay h1 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 800;
+  color: #1a1a2e;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.hero-text-overlay .highlight { color: #ff6b2b; }
+
+.hero-text-overlay p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.btn {
+  display: inline-block;
+  background: #ff6b2b;
+  color: #fff;
+  padding: 0.75rem 1.8rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  pointer-events: all;
+  transition: transform 0.2s, background 0.2s;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.btn:hover {
+  background: #e05520;
+  transform: translateY(-2px);
+}
+
+/* About overlay — second viewport, ABOVE canvas */
+.about-overlay-dom {
   position: absolute;
   top: 100vh;
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: 20;
   pointer-events: none;
 }
 
-.about-cards {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-}
+.about-cards { position: absolute; inset: 0; }
 
 .about-card {
   position: absolute;
@@ -51,6 +81,9 @@
   color: #c0f0ff;
   backdrop-filter: blur(8px);
   box-shadow: 0 0 20px rgba(0, 200, 255, 0.15);
+  font-family: 'Segoe UI', sans-serif;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
 }
 
 .name-card { top: 20%; left: 18%; }

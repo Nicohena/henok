@@ -6,6 +6,7 @@
   height: 100vh;
   pointer-events: none;
   overflow: hidden;
+  z-index: 10;
 }
 
 /* Lightfall fills the entire about section behind the canvas */
@@ -34,9 +35,11 @@
   color: #c0f0ff;
   backdrop-filter: blur(8px);
   box-shadow: 0 0 20px rgba(0, 200, 255, 0.15);
+  opacity: 0;
+  transition: opacity 0.6s ease-out;
+  z-index: 20;
 }
 
-/* Name card — upper left of center */
 .name-card {
   top: 20%;
   left: 18%;
@@ -48,13 +51,11 @@
   color: #fff;
   margin-bottom: 0.3rem;
 }
-
 .name-card p {
   font-size: 0.85rem;
   color: #80d8ff;
 }
 
-/* Bio card — lower left */
 .bio-card {
   top: 45%;
   left: 5%;
@@ -64,32 +65,27 @@
   color: #a0d8ef;
 }
 
-/* Skills card — right side */
 .skills-card {
   top: 28%;
   right: 6%;
   min-width: 200px;
 }
-
 .skills-card h4 {
   font-size: 1rem;
   font-weight: 700;
   color: #fff;
   margin-bottom: 0.6rem;
 }
-
 .skills-card ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-
 .skills-card ul li {
   font-size: 0.85rem;
   color: #a0d8ef;
   padding: 0.2rem 0;
 }
-
 .skills-card ul li::before {
   content: '• ';
   color: #00c8ff;

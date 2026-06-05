@@ -1,14 +1,14 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { useScroll, useGLTF, useAnimations } from '@react-three/drei'
+import { useGLTF, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 import DeskSetup from './DeskSetup'
 import FlowerPot from './FlowerPot'
 
 export default function SceneContent() {
-  const scroll      = useScroll()
-  const charRef     = useRef()
-  const fadeGroupRef = useRef() // desk + flower pot — will fade out
+  const charRef      = useRef()
+  const fadeGroupRef = useRef()
+  const scrollY      = useRef(0) // Track raw scrollY value
 
   const typing  = useGLTF('/typing.glb')
   const talking = useGLTF('/sitting_and_talking.glb')
@@ -17,17 +17,24 @@ export default function SceneContent() {
   const { actions: typingActions, mixer } = useAnimations(typing.animations, charRef)
   const talkingActionRef = useRef(null)
 
-  // Hero state
-  const heroX        = -0.28
-  const heroY        = -1.8
+  // Hero → About states
+  const heroX        = 1.
+  const heroY        = -0.5
   const heroScale    = 1.8
   const heroRotation = Math.PI * -0.35
-
-  // About state
   const aboutX        = 0.0
-  const aboutY        = -1.8
+  const aboutY        = -1.0
   const aboutScale    = 2.3
   const aboutRotation = Math.PI * 1.0
+
+  // Listen to native window scroll
+  useEffect(() => {
+    const onScroll = () => {
+      scrollY.current = window.scrollY
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => {
     if (!mixer || !typingActions) return
@@ -40,9 +47,29 @@ export default function SceneContent() {
       talkingActionRef.current = mixer.clipAction(talkingClip, charRef.current)
     }
 
-    // Make all fade-group meshes transparent-capable
     if (fadeGroupRef.current) {
       fadeGroupRef.current.traverse((child) => {
+        if (child.isMesh && child.material) {
+          child.material = child.material.clone()
+          child.material.transparent = true
+          child.castShadow = true
+          child.receiveShadow = true
+        }
+      })
+    }
+    if (charRef.current) {
+      charRef.current.traverse((child) => {
+        if (child.isMesh && child.material) {
+          child.material = child.material.clone()
+          child.material.transparent = true
+          child.castShadow = true
+          child.receiveShadow = true
+        }
+      })
+    }
+    // Also make character meshes transparent for fading
+    if (charRef.current) {
+      charRef.current.traverse((child) => {
         if (child.isMesh && child.material) {
           child.material = child.material.clone()
           child.material.transparent = true
@@ -53,23 +80,44 @@ export default function SceneContent() {
 
   useFrame(() => {
     if (!charRef.current) return
-    const t = scroll.offset
+    const currentY = scrollY.current
+    const height = window.innerHeight
+
+    // t goes 0→1 over 75% of the Hero to About scroll range (completes at 75vh)
+    const t = Math.min(currentY / (height * 0.75), 1)
+
+    // outT goes 0→1 as we scroll past the About section (100vh to 200vh)
+    const outT = Math.min(Math.max((currentY - height) / height, 0), 1)
 
     // Animate character + chair
     charRef.current.position.x = THREE.MathUtils.lerp(heroX, aboutX, t)
+
+    // Keep character at aboutY position once in About section (no slide-down)
     charRef.current.position.y = THREE.MathUtils.lerp(heroY, aboutY, t)
+
     charRef.current.scale.setScalar(THREE.MathUtils.lerp(heroScale, aboutScale, t))
     charRef.current.rotation.y = THREE.MathUtils.lerp(heroRotation, aboutRotation, t)
 
-    // Fade out desk + flower pot
+    // Fade out desk + pot
     if (fadeGroupRef.current) {
-      const opacity = THREE.MathUtils.lerp(1, 0, Math.min(t * 2, 1)) // fade by 50% scroll
+      const opacity = THREE.MathUtils.lerp(1, 0, t)
       fadeGroupRef.current.traverse((child) => {
         if (child.isMesh && child.material) {
           child.material.opacity = opacity
         }
       })
       fadeGroupRef.current.visible = opacity > 0.01
+    }
+
+    // Keep character and chair fully visible (no opacity change)
+    if (charRef.current) {
+      // Ensure opacity stays at 1
+      charRef.current.traverse((child) => {
+        if (child.isMesh && child.material) {
+          child.material.opacity = 1
+        }
+      })
+      charRef.current.visible = true
     }
 
     // Animation crossfade
@@ -89,25 +137,25 @@ export default function SceneContent() {
 
   return (
     <>
-      {/* Fade group — desk and flower pot disappear on scroll */}
       <group ref={fadeGroupRef}>
         <DeskSetup />
-        <FlowerPot position={[2.5, -1.8, 0.5]} />
+        <FlowerPot position={[4, -1.8, 0.3]} />
       </group>
 
-      {/* Character + chair — scroll animated */}
       <group
         ref={charRef}
         position={[heroX, heroY, 0.99]}
         scale={heroScale}
         rotation={[0, heroRotation, 0]}
       >
-        <primitive object={typing.scene} />
+        <primitive object={typing.scene} castShadow receiveShadow />
         <primitive
           object={chair.scene}
-          position={[0, 0, 0]}
+          position={[0, -0.05, 0]}
           scale={0.0083}
           rotation={[0, Math.PI, 0]}
+          castShadow
+          receiveShadow
         />
       </group>
     </>
