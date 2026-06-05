@@ -92,7 +92,7 @@ export default function SceneBackground() {
         position={[5, 5, 5]} 
         intensity={1} 
         castShadow 
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[1024, 1024]}
       >
         <orthographicCamera attach="shadow-camera" args={[-10, 10, 10, -10]} />
       </directionalLight>
