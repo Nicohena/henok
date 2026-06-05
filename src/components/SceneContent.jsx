@@ -4,6 +4,7 @@ import { useGLTF, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
 import DeskSetup from './DeskSetup'
 import FlowerPot from './FlowerPot'
+import HeroEnvironment from './HeroEnvironment'
 
 export default function SceneContent() {
   const charRef      = useRef()
@@ -23,7 +24,7 @@ export default function SceneContent() {
   const heroScale    = 1.8
   const heroRotation = Math.PI * -0.35
   const aboutX        = 0.0
-  const aboutY        = -1.0
+  const aboutY        = -0.5
   const aboutScale    = 2.3
   const aboutRotation = Math.PI * 1.0
 
@@ -138,8 +139,9 @@ export default function SceneContent() {
   return (
     <>
       <group ref={fadeGroupRef}>
+        <HeroEnvironment />
         <DeskSetup />
-        <FlowerPot position={[4, -1.8, 0.3]} />
+        <FlowerPot position={[4, -0.5, 0.3]} />
       </group>
 
       <group
