@@ -1,5 +1,6 @@
 import thumbnailStreakon from '../assets/thumbnails/streakon.webp'
-import thumbnailCubewar from '../assets/thumbnails/cubewar.webp'
+import thumbnel_for_gojo from '../assets/images/projects/cubewar/thumbnel_for_gojo.png'
+import thumbnail from '../assets/images/projects/pokedex/thumbnail.png'
 import thumbnailQuibbo from '../assets/thumbnails/quibbo.webp'
 import thumbnailSharkie from '../assets/thumbnails/sharkie.webp'
 import thumbnailPokedex from '../assets/thumbnails/pokedex.webp'
@@ -15,6 +16,12 @@ import cubewar2 from '../assets/images/projects/cubewar/cubewar-2.webp'
 import cubewar3 from '../assets/images/projects/cubewar/cubewar-3.webp'
 import cubewar4 from '../assets/images/projects/cubewar/cubewar-4.webp'
 import cubewar5 from '../assets/images/projects/cubewar/cubewar-5.webp'
+import payment from '../assets/images/projects/cubewar/payment.png'
+import notification from '../assets/images/projects/cubewar/notification.png'
+import authentication from '../assets/images/projects/cubewar/authentication.png'
+import admin_dashboard from '../assets/images/projects/cubewar/admin-dashboard.png'
+import landing_page from '../assets/images/projects/cubewar/landingpage.png'
+import chatpage from '../assets/images/projects/cubewar/chatpage.png'
 
 import quibbo0 from '../assets/images/projects/quibbo/quibbo-0.webp'
 import quibbo1 from '../assets/images/projects/quibbo/quibbo-1.webp'
@@ -29,10 +36,12 @@ import sharkie2 from '../assets/images/projects/sharkie/sharkie-2.webp'
 import sharkie3 from '../assets/images/projects/sharkie/sharkie-3.webp'
 import sharkie4 from '../assets/images/projects/sharkie/sharkie-4.webp'
 
-import pokedex0 from '../assets/images/projects/pokedex/pokedex-0.webp'
-import pokedex1 from '../assets/images/projects/pokedex/pokedex-1.webp'
-import pokedex2 from '../assets/images/projects/pokedex/pokedex-2.webp'
-import pokedex3 from '../assets/images/projects/pokedex/pokedex-3.webp'
+
+import admindash from '../assets/images/projects/pokedex/admindash.png'
+import preference from '../assets/images/projects/pokedex/preference.png'
+import saveditems from '../assets/images/projects/pokedex/saveditems.png'
+import items from '../assets/images/projects/pokedex/items.png'
+import itemdetail from '../assets/images/projects/pokedex/itemdetail.png'
 
 import videoCubewar from '../assets/videos/cubewar.mp4'
 import videoQuibbo from '../assets/videos/quibbo.mp4'
@@ -60,23 +69,23 @@ export const projects = [
   },
   {
     id: 'cubewar',
-    title: 'House Rental Platform',
+    title: 'Gojo',
     shortDesc: 'Property rental marketplace',
     description:
       'MERN property rental marketplace for Tenants, Owners, and Admins. Supports geospatial search, radius filtering, Leaflet maps, complete booking flow, real-time Socket.io notifications, Stripe payments, Cloudinary image management, reviews, ratings, and verified listing badges.',
-    thumbnail: thumbnailCubewar,
+    thumbnail: thumbnel_for_gojo,
     tags: ['React', 'Node.js', 'MongoDB', 'WebSockets', 'Stripe', 'Cloudinary'],
     theme: 'dark',
-    github: '',
+    github: 'https://github.com/Nicohena/Gojo.git',
     live: '',
     components: [
       { type: 'video', src: videoCubewar, caption: 'Rental marketplace workflow' },
-      { type: 'image', src: cubewar0, alt: 'Property discovery', caption: 'Property discovery' },
-      { type: 'image', src: cubewar1, alt: 'Map-based search', caption: 'Map-based search' },
-      { type: 'image', src: cubewar2, alt: 'Booking and authentication', caption: 'Booking and authentication' },
-      { type: 'image', src: cubewar3, alt: 'Responsive rental experience', caption: 'Responsive rental experience' },
-      { type: 'image', src: cubewar4, alt: 'Payments and reviews', caption: 'Payments and reviews' },
-      { type: 'image', src: cubewar5, alt: 'Real-time notifications', caption: 'Real-time notifications' },
+      { type: 'image', src: landing_page, alt: 'Landing page', caption: 'Landing page' },
+      { type: 'image', src: chatpage, alt: 'Messenger', caption: 'Messenger' },
+      { type: 'image', src: authentication, alt: 'Authentication', caption: 'Authentication' },
+      { type: 'image', src: admin_dashboard, alt: 'Admin dashboard', caption: 'Admin dashboard' },
+      { type: 'image', src: payment, alt: 'Payments', caption: 'Payments' },
+      { type: 'image', src: notification, alt: 'Real-time notifications', caption: 'Real-time notifications' },
     ],
   },
   {
@@ -122,21 +131,21 @@ export const projects = [
   },
   {
     id: 'pokedex',
-    title: 'Panda Kitchen Menu',
+    title: 'Gebeta',
     shortDesc: 'Digital restaurant management system',
     description:
       'Digital restaurant management system with a public customer menu and protected admin dashboard. Features 5-language support, multi-currency pricing with real-time exchange rates, rich menu item management, Supabase real-time subscriptions, dark mode, and responsive mobile-first interface.',
-    thumbnail: thumbnailPokedex,
+    thumbnail: thumbnail,
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Supabase', 'PostgreSQL'],
     theme: 'light',
-    github: '',
+    github: 'https://github.com/Nicohena/Gebeta.git',
     live: '',
     components: [
       { type: 'video', src: videoPokedex, caption: 'Digital restaurant menu' },
-      { type: 'image', src: pokedex0, alt: 'Customer menu', caption: 'Customer menu' },
-      { type: 'image', src: pokedex1, alt: 'Admin dashboard', caption: 'Admin dashboard' },
-      { type: 'image', src: pokedex2, alt: 'Multi-language menu', caption: 'Multi-language menu' },
-      { type: 'image', src: pokedex3, alt: 'Responsive mobile design', caption: 'Responsive mobile design' },
+      { type: 'image', src: items, alt: 'Customer menu', caption: 'Customer menu' },
+      { type: 'image', src: admindash, alt: 'Admin dashboard', caption: 'Admin dashboard' },
+      { type: 'image', src: saveditems, alt: 'Saved items', caption: 'Saved items' },
+      { type: 'image', src: itemdetail, alt: 'Item detail', caption: 'Item detail' },
     ],
   },
 ]
