@@ -3,7 +3,6 @@ import './LoadingScreen.css'
 
 export default function LoadingScreen({ progress, isVisible }) {
   const barRef = useRef(null)
-  const dotRefs = [useRef(null), useRef(null), useRef(null)]
 
   useEffect(() => {
     if (barRef.current) {
@@ -39,8 +38,8 @@ export default function LoadingScreen({ progress, isVisible }) {
 
         {/* Pulse dots */}
         <div className="loading-dots" aria-hidden="true">
-          {dotRefs.map((ref, i) => (
-            <span key={i} ref={ref} className="loading-dot" style={{ animationDelay: `${i * 0.2}s` }} />
+          {[0, 1, 2].map((i) => (
+            <span key={i} className="loading-dot" style={{ animationDelay: `${i * 0.2}s` }} />
           ))}
         </div>
       </div>

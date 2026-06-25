@@ -1,12 +1,36 @@
 import { useEffect, useRef, lazy, Suspense, useState, useCallback } from "react";
-import MainScene from "./components/MainScene";
 import Navbar from "./components/Navbar";
 import TopRightActions from "./components/TopRightActions";
 import LoadingScreen from "./components/LoadingScreen";
 
+const MainScene = lazy(() => import("./components/MainScene"));
 // Lazy-load below-the-fold sections — defers their JS parse cost until needed
 const ProjectsSection = lazy(() => import("./components/ProjectsSection"));
 const ContactSection  = lazy(() => import("./components/ContactSection"));
+
+function LazyWhenNear({ children, rootMargin = "600px 0px" }) {
+  const ref = useRef(null);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    if (shouldRender || !ref.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldRender(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [rootMargin, shouldRender]);
+
+  return <div ref={ref}>{shouldRender ? children : null}</div>;
+}
 
 function App() {
   const bgRef = useRef(null);
@@ -46,14 +70,18 @@ function App() {
         <Navbar />
         <TopRightActions />
         <div id="hero" style={{ position: "relative", height: "200vh" }}>
-          <MainScene onProgress={handleProgress} onLoaded={handleLoaded} />
+          <Suspense fallback={null}>
+            <MainScene onProgress={handleProgress} onLoaded={handleLoaded} />
+          </Suspense>
         </div>
-        <Suspense fallback={null}>
-          <div id="projects">
-            <ProjectsSection />
-          </div>
-          <ContactSection />
-        </Suspense>
+        <div id="projects">
+          <LazyWhenNear>
+            <Suspense fallback={null}>
+              <ProjectsSection />
+              <ContactSection />
+            </Suspense>
+          </LazyWhenNear>
+        </div>
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { Environment, ContactShadows } from "@react-three/drei";
-import { Suspense, useEffect, useRef, useCallback } from "react";
+import { Suspense, useEffect, useRef, useCallback, useState } from "react";
 import SceneContent from "./SceneContent";
 import SceneBackground from "./SceneBackground";
 import LightRays from "./LightRays";
@@ -10,6 +10,9 @@ import "./MainScene.css";
 
 export default function MainScene({ onProgress, onLoaded }) {
   const aboutCardsRef = useRef(null);
+  const lightfallRef = useRef(null);
+  const lightRaysVisibleRef = useRef(false);
+  const [showLightRays, setShowLightRays] = useState(false);
   const handleProgress = useCallback((p) => onProgress?.(p), [onProgress])
   const handleLoaded   = useCallback(() => onLoaded?.(), [onLoaded])
 
@@ -26,8 +29,13 @@ export default function MainScene({ onProgress, onLoaded }) {
         if (aboutCardsRef.current) {
           const cards = aboutCardsRef.current.querySelectorAll('.about-card-wrapper')
           cards.forEach((card) => { card.style.opacity = t })
-          const lightfallBg = document.querySelector('.lightfall-bg')
-          if (lightfallBg) lightfallBg.style.opacity = t
+        }
+        if (lightfallRef.current) lightfallRef.current.style.opacity = t
+
+        const shouldShowLightRays = t > 0.05
+        if (lightRaysVisibleRef.current !== shouldShowLightRays) {
+          lightRaysVisibleRef.current = shouldShowLightRays
+          setShowLightRays(shouldShowLightRays)
         }
       })
     }
@@ -66,7 +74,7 @@ export default function MainScene({ onProgress, onLoaded }) {
               overlayContent={
                 <div className="glass-panel">
                   <h3>Henok</h3>
-                  <p>📍 Ethiopia</p>
+                  <p>Ethiopia</p>
                 </div>
               }
             />
@@ -121,30 +129,32 @@ export default function MainScene({ onProgress, onLoaded }) {
       {/* Sticky canvas — fixed height, sticks while scrolling hero+about */}
       <div className="canvas-sticky-wrapper">
         {/* LightRays background (fades in via scroll, behind 3D canvas) */}
-        <div className="lightfall-bg">
-          <LightRays
-            raysOrigin="top-center"
-            raysColor="#00C8FF"
-            raysSpeed={1}
-            lightSpread={0.5}
-            rayLength={3}
-            followMouse={true}
-            mouseInfluence={0.1}
-            noiseAmount={0}
-            distortion={0}
-            className="custom-rays"
-            pulsating={false}
-            fadeDistance={1}
-            saturation={1}
-          />
+        <div className="lightfall-bg" ref={lightfallRef}>
+          {showLightRays && (
+            <LightRays
+              raysOrigin="top-center"
+              raysColor="#00C8FF"
+              raysSpeed={0.6}
+              lightSpread={0.5}
+              rayLength={3}
+              followMouse={false}
+              mouseInfluence={0}
+              noiseAmount={0}
+              distortion={0}
+              className="custom-rays"
+              pulsating={false}
+              fadeDistance={1}
+              saturation={1}
+            />
+          )}
         </div>
 
         <Canvas
           camera={{ position: [0, 3.5, 6], fov: 42 }}
           shadows
-          dpr={[1, 1.5]}
+          dpr={[0.9, 1.25]}
           performance={{ min: 0.5 }}
-          gl={{ antialias: true, alpha: true }}
+          gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
         >
           <Suspense fallback={null}>
             <SceneLoader onProgress={handleProgress} onLoaded={handleLoaded} />

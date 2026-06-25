@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import * as THREE from 'three'
@@ -23,11 +23,11 @@ export default function SceneContent() {
   const talkingActionRef = useRef(null)
 
   // Hero → About states
-  const heroX        = 1.
+  const heroX        = 1
   const heroY        = -0.5
   const heroScale    = 1.8
   const heroRotation = Math.PI * -0.35
-  const aboutX        = 0.0
+  const aboutX        = 0
   const aboutY        = -0.5
   const aboutScale    = 2.3
   const aboutRotation = Math.PI * 1.0
@@ -86,7 +86,6 @@ export default function SceneContent() {
     const height   = cachedHeight.current
 
     const t     = Math.min(currentY / (height * 0.75), 1)
-    const outT  = Math.min(Math.max((currentY - height) / height, 0), 1)
     frameCount.current++
 
     // Always lerp position/scale/rotation (cheap, must be smooth)

@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react'
+import { lazy, Suspense, useState, useCallback } from 'react'
 import { projects } from '../data/projects'
 import PreviewCard from './PreviewCard'
-import ProjectOverlay from './ProjectOverlay'
 import './ProjectsSection.css'
+
+const ProjectOverlay = lazy(() => import('./ProjectOverlay'))
 
 export default function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState(null)
@@ -38,11 +39,13 @@ export default function ProjectsSection() {
 
       {/* Full-screen detail overlay */}
       {selectedProject && (
-        <ProjectOverlay
-          project={selectedProject}
-          onClose={handleClose}
-          onSelectProject={handleSelect}
-        />
+        <Suspense fallback={null}>
+          <ProjectOverlay
+            project={selectedProject}
+            onClose={handleClose}
+            onSelectProject={handleSelect}
+          />
+        </Suspense>
       )}
     </>
   )

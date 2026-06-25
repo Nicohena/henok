@@ -1,11 +1,4 @@
-import { useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'motion/react';
-
-const springValues = {
-  damping: 30,
-  stiffness: 100,
-  mass: 2
-};
+import { useRef } from 'react';
 
 export default function TiltedCard({
   imageSrc,
@@ -24,22 +17,12 @@ export default function TiltedCard({
   className = ''
 }) {
   const ref = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(useMotionValue(0), springValues);
-  const rotateY = useSpring(useMotionValue(0), springValues);
-  const scale = useSpring(1, springValues);
-  const opacity = useSpring(0);
-  const rotateFigcaption = useSpring(0, {
-    stiffness: 350,
-    damping: 30,
-    mass: 1
-  });
-
-  const [lastY, setLastY] = useState(0);
+  const cardRef = useRef(null);
+  const captionRef = useRef(null);
+  const lastYRef = useRef(0);
 
   function handleMouse(e) {
-    if (!ref.current) return;
+    if (!ref.current || !cardRef.current) return;
 
     const rect = ref.current.getBoundingClientRect();
     const offsetX = e.clientX - rect.left - rect.width / 2;
@@ -48,28 +31,34 @@ export default function TiltedCard({
     const rotationX = (offsetY / (rect.height / 2)) * -rotateAmplitude;
     const rotationY = (offsetX / (rect.width / 2)) * rotateAmplitude;
 
-    rotateX.set(rotationX);
-    rotateY.set(rotationY);
+    cardRef.current.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) scale(${scaleOnHover})`;
 
-    x.set(e.clientX - rect.left);
-    y.set(e.clientY - rect.top);
-
-    const velocityY = offsetY - lastY;
-    rotateFigcaption.set(-velocityY * 0.6);
-    setLastY(offsetY);
+    if (captionRef.current) {
+      const velocityY = offsetY - lastYRef.current;
+      captionRef.current.style.opacity = '1';
+      captionRef.current.style.transform = `translate3d(${e.clientX - rect.left}px, ${e.clientY - rect.top}px, 0) rotate(${-velocityY * 0.6}deg)`;
+      lastYRef.current = offsetY;
+    }
   }
 
   function handleMouseEnter() {
-    scale.set(scaleOnHover);
-    opacity.set(1);
+    if (cardRef.current) {
+      cardRef.current.style.transform = `scale(${scaleOnHover})`;
+    }
+    if (captionRef.current) {
+      captionRef.current.style.opacity = '1';
+    }
   }
 
   function handleMouseLeave() {
-    opacity.set(0);
-    scale.set(1);
-    rotateX.set(0);
-    rotateY.set(0);
-    rotateFigcaption.set(0);
+    lastYRef.current = 0;
+    if (cardRef.current) {
+      cardRef.current.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+    }
+    if (captionRef.current) {
+      captionRef.current.style.opacity = '0';
+      captionRef.current.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
+    }
   }
 
   return (
@@ -90,18 +79,16 @@ export default function TiltedCard({
         </div>
       )}
 
-      <motion.div
-        className="relative [transform-style:preserve-3d] w-full h-full"
+      <div
+        ref={cardRef}
+        className="relative [transform-style:preserve-3d] w-full h-full transition-transform duration-200 ease-out will-change-transform"
         style={{
           width: imageWidth,
           height: imageHeight,
-          rotateX,
-          rotateY,
-          scale
         }}
       >
         {imageSrc && (
-          <motion.img
+          <img
             src={imageSrc}
             alt={altText}
             className="absolute top-0 left-0 object-cover rounded-[15px] will-change-transform [transform:translateZ(0)] w-full h-full"
@@ -113,24 +100,19 @@ export default function TiltedCard({
         )}
 
         {displayOverlayContent && overlayContent && (
-          <motion.div className="absolute inset-0 z-[2] will-change-transform [transform:translateZ(30px)]">
+          <div className="absolute inset-0 z-[2] will-change-transform [transform:translateZ(30px)]">
             {overlayContent}
-          </motion.div>
+          </div>
         )}
-      </motion.div>
+      </div>
 
       {showTooltip && (
-        <motion.figcaption
-          className="pointer-events-none absolute left-0 top-0 rounded-[4px] bg-white px-[10px] py-[4px] text-[10px] text-[#2d2d2d] opacity-0 z-[3] hidden sm:block"
-          style={{
-            x,
-            y,
-            opacity,
-            rotate: rotateFigcaption
-          }}
+        <figcaption
+          ref={captionRef}
+          className="pointer-events-none absolute left-0 top-0 rounded-[4px] bg-white px-[10px] py-[4px] text-[10px] text-[#2d2d2d] opacity-0 z-[3] hidden sm:block transition-opacity duration-150 will-change-transform"
         >
           {captionText}
-        </motion.figcaption>
+        </figcaption>
       )}
     </figure>
   );
