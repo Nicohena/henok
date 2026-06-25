@@ -47,7 +47,7 @@ export default function MainScene({ onProgress, onLoaded }) {
           <span className="hero-name-line">Henok</span>
           <span className="hero-name-line">Kebede</span>
         </h1>
-        <div className="hero-badge">WEB DEVELOPER</div>
+        <div className="hero-badge">FULL-STACK DEVELOPER</div>
       </div>
 
       {/* About overlay — second screen */}
