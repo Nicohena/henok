@@ -1,9 +1,11 @@
 import { useEffect, useRef, useCallback } from 'react'
 import { projects } from '../data/projects'
+import { projectDetailsById } from '../data/projectDetails'
 import './ProjectOverlay.css'
 
 export default function ProjectOverlay({ project, onClose, onSelectProject }) {
   const overlayRef = useRef(null)
+  const components = projectDetailsById[project.id] || []
 
   // Find the next project in the list
   const currentIndex = projects.findIndex((p) => p.id === project.id)
@@ -107,7 +109,7 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
 
           {/* Media content */}
           <div className="project-media-section">
-            {project.components.map((comp, i) => (
+            {components.map((comp, i) => (
               <div key={i} className="project-media-block">
                 {comp.type === 'video' ? (
                   <video
@@ -123,6 +125,7 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
                     src={comp.src}
                     alt={comp.alt || ''}
                     loading="lazy"
+                    decoding="async"
                   />
                 )}
                 {comp.caption && (
