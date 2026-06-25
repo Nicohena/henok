@@ -1,45 +1,59 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './TopRightActions.css';
 
 export default function TopRightActions() {
   const [isMuted, setIsMuted] = useState(true);
   const audioRef = useRef(null);
+  const userPausedRef = useRef(false);
+
+  const getAudio = () => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio('/music.mp3');
+      audioRef.current.loop = true;
+      audioRef.current.volume = 0.15;
+      audioRef.current.muted = false;
+      audioRef.current.preload = 'auto';
+    }
+    return audioRef.current;
+  };
 
   useEffect(() => {
-    // Initialize audio instance
-    audioRef.current = new Audio('/music.mp3');
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.15;
+    const audio = getAudio();
 
-    const tryPlay = async () => {
-      try {
-        await audioRef.current.play();
-        setIsMuted(false); // Autoplay succeeded
-      } catch (err) {
-        // Autoplay blocked by browser policy, wait for user interaction
+    const startMusic = () => {
+      if (userPausedRef.current || !audio.paused) return;
+      audio.muted = false;
+      audio.play().then(() => {
+        setIsMuted(false);
+        removeInteractionListeners();
+      }).catch(() => {
         setIsMuted(true);
-      }
+      });
     };
 
-    tryPlay();
-
-    // If blocked, play on first user interaction anywhere on the document
-    const handleFirstInteract = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        audioRef.current.play().then(() => {
-          setIsMuted(false);
-        }).catch(() => {});
-      }
-      document.removeEventListener('click', handleFirstInteract);
+    const handleFirstInteraction = (event) => {
+      if (event.target?.closest?.('.sound-btn')) return;
+      startMusic();
     };
 
-    document.addEventListener('click', handleFirstInteract);
+    const removeInteractionListeners = () => {
+      window.removeEventListener('pointerdown', handleFirstInteraction, true);
+      window.removeEventListener('click', handleFirstInteraction, true);
+      window.removeEventListener('keydown', handleFirstInteraction, true);
+      window.removeEventListener('touchstart', handleFirstInteraction, true);
+    };
+
+    startMusic();
+    window.addEventListener('pointerdown', handleFirstInteraction, { capture: true, passive: true });
+    window.addEventListener('click', handleFirstInteraction, true);
+    window.addEventListener('keydown', handleFirstInteraction, true);
+    window.addEventListener('touchstart', handleFirstInteraction, { capture: true, passive: true });
 
     return () => {
+      removeInteractionListeners();
       if (audioRef.current) {
         audioRef.current.pause();
       }
-      document.removeEventListener('click', handleFirstInteract);
     };
   }, []);
 
@@ -53,13 +67,19 @@ export default function TopRightActions() {
 
   const toggleSound = (e) => {
     e.stopPropagation(); // prevent global interaction handler from overriding toggle
-    if (!audioRef.current) return;
+    const audio = getAudio();
 
-    if (isMuted) {
-      audioRef.current.play().catch(() => {});
-      setIsMuted(false);
+    if (audio.paused) {
+      userPausedRef.current = false;
+      audio.muted = false;
+      audio.play().then(() => {
+        setIsMuted(false);
+      }).catch(() => {
+        setIsMuted(true);
+      });
     } else {
-      audioRef.current.pause();
+      userPausedRef.current = true;
+      audio.pause();
       setIsMuted(true);
     }
   };
