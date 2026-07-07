@@ -2,6 +2,11 @@ import streakon0 from '../assets/images/projects/streakon/streakon-0.webp'
 import streakon1 from '../assets/images/projects/streakon/streakon-1.webp'
 import streakon2 from '../assets/images/projects/streakon/streakon-2.webp'
 import streakon3 from '../assets/images/projects/streakon/streakon-3.webp'
+import Admin from '../assets/images/projects/streakon/Admin.png'
+import Authentication from '../assets/images/projects/streakon/Authentication.png'
+import hero from '../assets/images/projects/streakon/hero.png'
+import student from '../assets/images/projects/streakon/student.png'
+
 
 import payment from '../assets/images/projects/cubewar/payment.webp'
 import notification from '../assets/images/projects/cubewar/notification.webp'
@@ -32,13 +37,15 @@ import videoCubewar from '../assets/videos/cubewar.mp4'
 import videoQuibbo from '../assets/videos/quibbo.mp4'
 import videoSharkie from '../assets/videos/sharkie.mp4'
 import videoPokedex from '../assets/videos/pokedex.mp4'
+import quiz from '../assets/videos/quiz.mp4'
+
 
 export const projectDetailsById = {
   streakon: [
-    { type: 'image', src: streakon0, alt: 'Campus management dashboard', caption: 'Campus management dashboard' },
-    { type: 'image', src: streakon1, alt: 'Dorm and clearance modules', caption: 'Dorm and clearance modules' },
-    { type: 'image', src: streakon2, alt: 'AI campus assistant', caption: 'AI campus assistant' },
-    { type: 'image', src: streakon3, alt: 'Role-based workflows', caption: 'Role-based workflows' },
+    { type: 'image', src: hero, alt: 'Hero section', caption: 'Hero section' },
+    { type: 'image', src: Authentication, alt: 'Authentication', caption: 'Authentication' },
+    { type: 'image', src: student, alt: 'Student dashboard', caption: 'Student dashboard' },
+    { type: 'image', src: Admin, alt: 'Admin dashboard', caption: 'Admin dashboard' },
   ],
   cubewar: [
     { type: 'video', src: videoCubewar, caption: 'Rental marketplace workflow' },
@@ -50,7 +57,7 @@ export const projectDetailsById = {
     { type: 'image', src: notification, alt: 'Real-time notifications', caption: 'Real-time notifications' },
   ],
   quibbo: [
-    { type: 'video', src: videoQuibbo, caption: 'Learning platform experience' },
+    { type: 'video', src: quiz, caption: 'Taking a quiz', className: 'quiz-video' },
     { type: 'image', src: quibbo0, alt: 'Student dashboard', caption: 'Student dashboard' },
     { type: 'image', src: quibbo1, alt: 'Live classes', caption: 'Live classes' },
     { type: 'image', src: quibbo2, alt: 'Assignments and grading', caption: 'Assignments and grading' },

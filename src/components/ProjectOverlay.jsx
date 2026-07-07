@@ -110,7 +110,11 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
           {/* Media content */}
           <div className="project-media-section">
             {components.map((comp, i) => (
-              <div key={i} className="project-media-block">
+              <div
+                key={i}
+                className="project-media-block"
+                style={comp.aspectRatio ? { aspectRatio: comp.aspectRatio } : undefined}
+              >
                 {comp.type === 'video' ? (
                   <video
                     src={comp.src}
@@ -119,6 +123,7 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
                     loop
                     playsInline
                     preload="metadata"
+                    className={comp.className || ''}
                   />
                 ) : (
                   <img
