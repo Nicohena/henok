@@ -15,12 +15,14 @@ import adminDashboard from '../assets/images/projects/cubewar/admin-dashboard.we
 import landingPage from '../assets/images/projects/cubewar/landingpage.webp'
 import chatpage from '../assets/images/projects/cubewar/chatpage.webp'
 
-import quibbo0 from '../assets/images/projects/quibbo/quibbo-0.webp'
-import quibbo1 from '../assets/images/projects/quibbo/quibbo-1.webp'
-import quibbo2 from '../assets/images/projects/quibbo/quibbo-2.webp'
-import quibbo3 from '../assets/images/projects/quibbo/quibbo-3.webp'
-import quibbo4 from '../assets/images/projects/quibbo/quibbo-4.webp'
-import quibbo5 from '../assets/images/projects/quibbo/quibbo-5.webp'
+
+import admin from '../assets/images/projects/quibbo/admindashboard.png'
+import ai from '../assets/images/projects/quibbo/ai assistant.png'
+import content from '../assets/images/projects/quibbo/content creation.png'
+import certificate from '../assets/images/projects/quibbo/certificates and acheievements.png'
+import discussion from '../assets/images/projects/quibbo/disussion.png'
+import messages from '../assets/images/projects/quibbo/messages.png'
+
 
 import sharkie0 from '../assets/images/projects/sharkie/sharkie-0.webp'
 import sharkie1 from '../assets/images/projects/sharkie/sharkie-1.webp'
@@ -38,6 +40,7 @@ import videoQuibbo from '../assets/videos/quibbo.mp4'
 import videoSharkie from '../assets/videos/sharkie.mp4'
 import videoPokedex from '../assets/videos/pokedex.mp4'
 import quiz from '../assets/videos/quiz.mp4'
+import menu from '../assets/videos/menu.mp4'
 
 
 export const projectDetailsById = {
@@ -58,12 +61,12 @@ export const projectDetailsById = {
   ],
   quibbo: [
     { type: 'video', src: quiz, caption: 'Taking a quiz', className: 'quiz-video' },
-    { type: 'image', src: quibbo0, alt: 'Student dashboard', caption: 'Student dashboard' },
-    { type: 'image', src: quibbo1, alt: 'Live classes', caption: 'Live classes' },
-    { type: 'image', src: quibbo2, alt: 'Assignments and grading', caption: 'Assignments and grading' },
-    { type: 'image', src: quibbo3, alt: 'Learning resources', caption: 'Learning resources' },
-    { type: 'image', src: quibbo4, alt: 'Responsive learning UI', caption: 'Responsive learning UI' },
-    { type: 'image', src: quibbo5, alt: 'Progress tracking', caption: 'Progress tracking' },
+    { type: 'image', src: content, alt: 'Content creation', caption: 'Content creation', fit: 'contain' },
+    { type: 'image', src: admin, alt: 'Admin dashboard', caption: 'Admin dashboard', fit: 'contain' },
+    { type: 'image', src: ai, alt: 'AI assistant', caption: 'AI assistant', fit: 'contain' },
+    { type: 'image', src: certificate, alt: 'Certificates and achievements', caption: 'Certificates and achievements', fit: 'contain' },
+    { type: 'image', src: discussion, alt: 'Discussion forums', caption: 'Discussion forums', fit: 'contain' },
+    { type: 'image', src: messages, alt: 'Messages', caption: 'Messages', fit: 'contain' },
   ],
   sharkie: [
     { type: 'video', src: videoSharkie, caption: 'Agricultural marketplace workflow' },
@@ -74,7 +77,7 @@ export const projectDetailsById = {
     { type: 'image', src: sharkie4, alt: 'Admin analytics', caption: 'Admin analytics' },
   ],
   pokedex: [
-    { type: 'video', src: videoPokedex, caption: 'Digital restaurant menu' },
+    { type: 'video', src: menu, caption: 'Menu exploration' },
     { type: 'image', src: items, alt: 'Customer menu', caption: 'Customer menu' },
     { type: 'image', src: admindash, alt: 'Admin dashboard', caption: 'Admin dashboard' },
     { type: 'image', src: saveditems, alt: 'Saved items', caption: 'Saved items' },

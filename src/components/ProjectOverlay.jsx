@@ -124,6 +124,7 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
                     playsInline
                     preload="metadata"
                     className={comp.className || ''}
+                    style={comp.fit ? { objectFit: comp.fit } : undefined}
                   />
                 ) : (
                   <img
@@ -131,6 +132,7 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
                     alt={comp.alt || ''}
                     loading="lazy"
                     decoding="async"
+                    style={comp.fit ? { objectFit: comp.fit } : undefined}
                   />
                 )}
                 {comp.caption && (
