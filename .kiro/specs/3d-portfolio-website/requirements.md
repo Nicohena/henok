@@ -1,5 +1,41 @@
 # Requirements Document
 
+> ## Implementation Status (updated 2026-07-23)
+>
+> This spec was written as an aspirational design document. The shipped
+> implementation differs in several ways. This status block documents
+> what actually exists in the codebase so future readers can reconcile
+> the spec against reality.
+>
+> **Implemented:**
+> - ✅ Loading screen with progress bar (Req 1) — uses `useProgress` from drei
+> - ✅ 3D scene with character + desk + chair + flower pot (Req 2, simplified)
+> - ✅ HTML overlay with name, role badge (Req 7) — no GSAP entrance animation
+> - ✅ Scroll-driven hero → about transition (character lerps position/scale/rotation)
+> - ✅ Two-state animation crossfade: typing ↔ sitting_and_talking (not 3-phase Wave/Turn/Type)
+> - ✅ Draco compression on all GLB models (Req 10.6)
+> - ✅ `prefers-reduced-motion` support (Req 8.3) — freezes 3D choreography + CSS animations
+> - ✅ Project gallery with full-screen detail overlay (URL-driven via `?project=<id>`)
+> - ✅ Contact section with 3D waving character + social links
+> - ✅ ErrorBoundary around all 3D canvases with static fallback
+>
+> **Not Implemented (deferred):**
+> - ❌ Three-phase animation sequence (Wave → Turn → Type) — replaced with 2-state scroll-driven crossfade
+> - ❌ GSAP timeline — choreography uses `useFrame` + `THREE.MathUtils.lerp` instead
+> - ❌ ScreenTexture (scrolling code on monitor) — no dynamic canvas texture
+> - ❌ Mouse parallax camera shift (Req 9.1) — camera is fixed
+> - ❌ Character hover "look at camera" (Req 9.3)
+> - ❌ `detect-gpu` tier-based shadow/texture downgrade (Req 10.3) — static `dpr={[0.9, 1.25]}` + `performance={{ min: 0.5 }}`
+> - ❌ Mobile FOV adaptation (Req 11.1–11.2) — single FOV 42° for all viewports
+> - ❌ Toon/cel shading (Req 2.5) — uses `meshStandardMaterial`
+> - ❌ Asset load-failure error UI (Req 1.4) — `ErrorBoundary` catches but shows generic fallback
+> - ❌ WebGL-unsupported static fallback page (Req 1.5) — `ErrorBoundary` shows hero fallback instead
+>
+> **Changed:**
+> - 🔄 Animation crossfade duration is 0.5s (spec said 300–500ms) ✓ within range
+> - 🔄 Shadow map is 512×512 (spec said 1024 on desktop) — deliberate perf downgrade
+> - 🔄 Hero is scroll-driven, not time-driven — the character choreography responds to scroll position rather than playing on a timeline
+
 ## Introduction
 
 The hero section is the full-viewport landing experience of a 3D portfolio website. It features a cozy cartoon room rendered in Three.js containing a character seated at a desk with dual monitors, surrounded by room props (plants, pinboard, shelf, speakers). On page load the character plays a three-phase animation sequence: waving and smiling → turning toward the monitors → typing on the keyboard while code scrolls on the monitor screen. An HTML overlay sits in front of the 3D scene and shows the developer's name, tagline, and a "Get in touch" CTA button. The hero section is the first — and at this stage the only — section to implement.

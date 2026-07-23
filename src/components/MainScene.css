@@ -35,7 +35,7 @@
 }
 
 .hero-name-line {
-  font-family: 'Urbanist', 'Pro Font Windows', monospace;
+  font-family: var(--font-sans);
   font-size: clamp(3.2rem, 7vw, 7rem);
   font-weight: 600;
   color: #2a2a2a; /* Dark charcoal/almost black */
@@ -46,7 +46,7 @@
 .hero-badge {
   background-color: #38257a; /* Deep purple matching reference */
   color: #ffffff;
-  font-family: 'Courier New', Courier, monospace; /* Or a technical font */
+  font-family: var(--font-mono)
   font-size: clamp(1rem, 2vw, 1.8rem);
   font-weight: 700;
   padding: 0.5rem 1.5rem;
@@ -103,7 +103,7 @@
   color: #fff;
   backdrop-filter: blur(8px);
   box-shadow: 0 0 20px rgba(0, 200, 255, 0.15);
-  font-family: 'Pro Font Windows', monospace;
+  font-family: var(--font-mono);
   display: flex;
   flex-direction: column;
   justify-content: center;

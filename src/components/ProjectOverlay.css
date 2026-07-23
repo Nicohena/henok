@@ -149,7 +149,7 @@
   color: #1a1a2e;
   margin: 0;
   animation: heroTitleSlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .theme-dark .project-hero-title {
@@ -176,7 +176,7 @@
   font-weight: 600;
   background: rgba(0, 0, 0, 0.06);
   color: #444;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .theme-dark .project-tag {
@@ -190,7 +190,7 @@
   line-height: 1.7;
   color: #555;
   max-width: 520px;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
 }
 
 @media (min-width: 768px) {
@@ -229,7 +229,7 @@
   font-weight: 600;
   text-decoration: none;
   transition: background 0.2s, transform 0.15s;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
   border: none;
   cursor: pointer;
 }
@@ -322,13 +322,53 @@
   font-weight: 700;
   color: #333;
   backdrop-filter: blur(6px);
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* Quiz video crop fix */
 .quiz-video {
   transform: scale(1.15);
   object-fit: cover;
+}
+
+/* ─── Empty state (no media for this project yet) ─────────── */
+.project-media-empty {
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 3rem 2rem;
+  text-align: center;
+  border: 2px dashed rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.02);
+  font-family: var(--font-sans);
+}
+
+.project-media-empty p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #555;
+  margin: 0;
+}
+
+.project-media-empty-sub {
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  color: #888 !important;
+  margin-top: 0.5rem !important;
+}
+
+.theme-dark .project-media-empty {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.theme-dark .project-media-empty p {
+  color: #a8b8cc;
+}
+
+.theme-dark .project-media-empty-sub {
+  color: #7a8a9a !important;
 }
 
 .theme-dark .project-media-caption {
@@ -356,7 +396,7 @@
   transition: background 0.2s, border-color 0.2s;
   background: transparent;
   text-align: left;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .project-next-card:hover {

@@ -5,15 +5,18 @@ import * as THREE from 'three'
 import DeskSetup from './DeskSetup'
 import FlowerPot from './FlowerPot'
 import HeroEnvironment from './HeroEnvironment'
+import { useScrollProgress } from '../hooks/useScrollProgress'
 
-export default function SceneContent() {
+export default function SceneContent({ reduceMotion = false }) {
   const charRef      = useRef()
   const fadeGroupRef = useRef()
   const fadeMaterialsRef = useRef([])
-  const scrollY      = useRef(0)
   const frameCount   = useRef(0)
-  const cachedHeight = useRef(window.innerHeight)
   const prevT        = useRef(-1)
+
+  // Single shared scroll listener — exposes a ref we can read inside
+  // useFrame without triggering re-renders. disabled when reduceMotion.
+  const { progressRef } = useScrollProgress({ disabled: reduceMotion })
 
   const typing  = useGLTF('/typing.glb')
   const talking = useGLTF('/sitting_and_talking.glb')
@@ -31,18 +34,6 @@ export default function SceneContent() {
   const aboutY        = -0.5
   const aboutScale    = 2.3
   const aboutRotation = Math.PI * 1.0
-
-  // Listen to native window scroll + cache innerHeight on resize
-  useEffect(() => {
-    const onScroll = () => { scrollY.current = window.scrollY }
-    const onResize = () => { cachedHeight.current = window.innerHeight }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onResize, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onResize)
-    }
-  }, [])
 
   useEffect(() => {
     if (!mixer || !typingActions) return
@@ -78,14 +69,31 @@ export default function SceneContent() {
         }
       })
     }
-  }, [mixer, typingActions, talking.animations])
+  // Note: depend on `talking` (the gltf object) rather than
+  // `talking.animations` (a new array reference on every render) to
+  // avoid re-running this effect — which re-clones materials and
+  // re-traverses the scene graph — on every render.
+  }, [mixer, typingActions, talking])
 
   useFrame(() => {
     if (!charRef.current) return
-    const currentY = scrollY.current
-    const height   = cachedHeight.current
 
-    const t     = Math.min(currentY / (height * 0.75), 1)
+    // Reduced motion: freeze character in hero pose, keep desk visible,
+    // disable all scroll-driven choreography. Typing animation still plays
+    // so the scene doesn't look dead, but no crossfade to talking.
+    if (reduceMotion) {
+      charRef.current.position.x = heroX
+      charRef.current.position.y = heroY
+      charRef.current.scale.setScalar(heroScale)
+      charRef.current.rotation.y = heroRotation
+      if (fadeGroupRef.current) fadeGroupRef.current.visible = true
+      if (fadeMaterialsRef.current.length > 0) {
+        fadeMaterialsRef.current.forEach((mat) => { mat.opacity = 1 })
+      }
+      return
+    }
+
+    const t = progressRef.current
     frameCount.current++
 
     // Always lerp position/scale/rotation (cheap, must be smooth)

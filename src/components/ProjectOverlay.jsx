@@ -109,37 +109,46 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
 
           {/* Media content */}
           <div className="project-media-section">
-            {components.map((comp, i) => (
-              <div
-                key={i}
-                className="project-media-block"
-                style={comp.aspectRatio ? { aspectRatio: comp.aspectRatio } : undefined}
-              >
-                {comp.type === 'video' ? (
-                  <video
-                    src={comp.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    className={comp.className || ''}
-                    style={comp.fit ? { objectFit: comp.fit } : undefined}
-                  />
-                ) : (
-                  <img
-                    src={comp.src}
-                    alt={comp.alt || ''}
-                    loading="lazy"
-                    decoding="async"
-                    style={comp.fit ? { objectFit: comp.fit } : undefined}
-                  />
-                )}
-                {comp.caption && (
-                  <span className="project-media-caption">{comp.caption}</span>
-                )}
+            {components.length === 0 ? (
+              <div className="project-media-empty">
+                <p>Screenshots and demos coming soon.</p>
+                <p className="project-media-empty-sub">
+                  Check the source code on GitHub in the meantime.
+                </p>
               </div>
-            ))}
+            ) : (
+              components.map((comp, i) => (
+                <div
+                  key={`${project.id}-${i}-${typeof comp.src === 'string' ? comp.src.split('/').pop() : i}`}
+                  className="project-media-block"
+                  style={comp.aspectRatio ? { aspectRatio: comp.aspectRatio } : undefined}
+                >
+                  {comp.type === 'video' ? (
+                    <video
+                      src={comp.src}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className={comp.className || ''}
+                      style={comp.fit ? { objectFit: comp.fit } : undefined}
+                    />
+                  ) : (
+                    <img
+                      src={comp.src}
+                      alt={comp.alt || ''}
+                      loading="lazy"
+                      decoding="async"
+                      style={comp.fit ? { objectFit: comp.fit } : undefined}
+                    />
+                  )}
+                  {comp.caption && (
+                    <span className="project-media-caption">{comp.caption}</span>
+                  )}
+                </div>
+              ))
+            )}
           </div>
 
           {/* Next project */}

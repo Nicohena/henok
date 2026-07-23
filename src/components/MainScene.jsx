@@ -4,8 +4,10 @@ import { Suspense, useEffect, useRef, useCallback, useState } from "react";
 import SceneContent from "./SceneContent";
 import SceneBackground from "./SceneBackground";
 import LightRays from "./LightRays";
-import TiltedCard from "./TiltedCard";
+import TiltWrapper from "./TiltWrapper";
 import SceneLoader from "./SceneLoader";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useScrollProgress } from "../hooks/useScrollProgress";
 import "./MainScene.css";
 
 export default function MainScene({ onProgress, onLoaded }) {
@@ -15,37 +17,40 @@ export default function MainScene({ onProgress, onLoaded }) {
   const [showLightRays, setShowLightRays] = useState(false);
   const handleProgress = useCallback((p) => onProgress?.(p), [onProgress])
   const handleLoaded   = useCallback(() => onLoaded?.(), [onLoaded])
+  const reduceMotion = useReducedMotion();
+  // Shared scroll listener — `progress` (state) re-renders this component
+  // when scroll crosses rAF thresholds, used to drive about-card opacity
+  // and the LightRays mount/unmount toggle.
+  const { progress } = useScrollProgress({ disabled: reduceMotion });
 
-  // Fade in about cards as user scrolls into the About section
+  // Apply scroll progress to DOM elements (about cards + lightfall bg).
+  // Runs whenever `progress` changes — no internal scroll listener.
   useEffect(() => {
-    let rafId = null
-    const handleScroll = () => {
-      if (rafId) return
-      rafId = requestAnimationFrame(() => {
-        rafId = null
-        const scrollY = window.scrollY
-        const height = window.innerHeight
-        const t = Math.min(scrollY / (height * 0.75), 1)
-        if (aboutCardsRef.current) {
-          const cards = aboutCardsRef.current.querySelectorAll('.about-card-wrapper')
-          cards.forEach((card) => { card.style.opacity = t })
-        }
-        if (lightfallRef.current) lightfallRef.current.style.opacity = t
-
-        const shouldShowLightRays = t > 0.05
-        if (lightRaysVisibleRef.current !== shouldShowLightRays) {
-          lightRaysVisibleRef.current = shouldShowLightRays
-          setShowLightRays(shouldShowLightRays)
-        }
+    if (reduceMotion) {
+      // Reduced motion: show everything at full opacity, no light rays.
+      if (aboutCardsRef.current) {
+        aboutCardsRef.current.querySelectorAll('.about-card-wrapper').forEach((card) => {
+          card.style.opacity = 1
+        })
+      }
+      if (lightfallRef.current) lightfallRef.current.style.opacity = 1
+      Promise.resolve().then(() => setShowLightRays(false))
+      return
+    }
+    // Normal: apply fade based on scroll progress
+    if (aboutCardsRef.current) {
+      aboutCardsRef.current.querySelectorAll('.about-card-wrapper').forEach((card) => {
+        card.style.opacity = progress
       })
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      if (rafId) cancelAnimationFrame(rafId)
+    if (lightfallRef.current) lightfallRef.current.style.opacity = progress
+
+    const shouldShowLightRays = progress > 0.05
+    if (lightRaysVisibleRef.current !== shouldShowLightRays) {
+      lightRaysVisibleRef.current = shouldShowLightRays
+      setShowLightRays(shouldShowLightRays)
     }
-  }, [])
+  }, [progress, reduceMotion])
 
   return (
     <>
@@ -63,65 +68,47 @@ export default function MainScene({ onProgress, onLoaded }) {
 
         <div className="about-cards">
           <div className="about-card-wrapper name-card">
-            <TiltedCard
+            <TiltWrapper
               containerWidth="220px"
               containerHeight="110px"
-              imageWidth="100%"
-              imageHeight="100%"
-              showMobileWarning={false}
-              showTooltip={false}
-              displayOverlayContent={true}
-              overlayContent={
-                <div className="glass-panel">
-                  <h3>Henok</h3>
-                  <p>Ethiopia</p>
-                </div>
-              }
-            />
+            >
+              <div className="glass-panel">
+                <h3>Henok</h3>
+                <p>Ethiopia</p>
+              </div>
+            </TiltWrapper>
           </div>
 
           <div className="about-card-wrapper bio-card">
-            <TiltedCard
+            <TiltWrapper
               containerWidth="280px"
               containerHeight="170px"
-              imageWidth="100%"
-              imageHeight="100%"
-              showMobileWarning={false}
-              showTooltip={false}
-              displayOverlayContent={true}
-              overlayContent={
-                <div className="glass-panel">
-                  <p>
-                    Builds immersive 3D web experiences and interactive systems that
-                    are fast, responsive, and fun to use.
-                  </p>
-                </div>
-              }
-            />
+            >
+              <div className="glass-panel">
+                <p>
+                  Builds immersive 3D web experiences and interactive systems that
+                  are fast, responsive, and fun to use.
+                </p>
+              </div>
+            </TiltWrapper>
           </div>
 
           <div className="about-card-wrapper skills-card">
-            <TiltedCard
+            <TiltWrapper
               containerWidth="240px"
               containerHeight="260px"
-              imageWidth="100%"
-              imageHeight="100%"
-              showMobileWarning={false}
-              showTooltip={false}
-              displayOverlayContent={true}
-              overlayContent={
-                <div className="glass-panel">
-                  <h4>Skills</h4>
-                  <ul>
-                    <li>Three.js &amp; WebGL</li>
-                    <li>React &amp; Next.js</li>
-                    <li>Node.js &amp; Express</li>
-                    <li>TypeScript</li>
-                    <li>Python &amp; Django</li>
-                  </ul>
-                </div>
-              }
-            />
+            >
+              <div className="glass-panel">
+                <h4>Skills</h4>
+                <ul>
+                  <li>Three.js &amp; WebGL</li>
+                  <li>React &amp; Next.js</li>
+                  <li>Node.js &amp; Express</li>
+                  <li>TypeScript</li>
+                  <li>Python &amp; Django</li>
+                </ul>
+              </div>
+            </TiltWrapper>
           </div>
         </div>
       </div>
@@ -130,7 +117,7 @@ export default function MainScene({ onProgress, onLoaded }) {
       <div className="canvas-sticky-wrapper">
         {/* LightRays background (fades in via scroll, behind 3D canvas) */}
         <div className="lightfall-bg" ref={lightfallRef}>
-          {showLightRays && (
+          {showLightRays && !reduceMotion && (
             <LightRays
               raysOrigin="top-center"
               raysColor="#00C8FF"
@@ -159,7 +146,7 @@ export default function MainScene({ onProgress, onLoaded }) {
           <Suspense fallback={null}>
             <SceneLoader onProgress={handleProgress} onLoaded={handleLoaded} />
             <SceneBackground />
-            <SceneContent />
+            <SceneContent reduceMotion={reduceMotion} />
             {/* Ambient contact shadows for soft ambient occlusion */}
             <ContactShadows
               position={[0, -0.5, 0]}

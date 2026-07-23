@@ -1,4 +1,5 @@
-import { lazy, Suspense, useState, useCallback } from 'react'
+import { lazy, Suspense, useCallback, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { projects } from '../data/projects'
 import PreviewCard from './PreviewCard'
 import './ProjectsSection.css'
@@ -6,15 +7,42 @@ import './ProjectsSection.css'
 const ProjectOverlay = lazy(() => import('./ProjectOverlay'))
 
 export default function ProjectsSection() {
-  const [selectedProject, setSelectedProject] = useState(null)
+  // Read/write the selected project ID from the URL query string.
+  // Example: /?project=cubewar opens the Gojo overlay.
+  // Closing the overlay removes the param, leaving the user on /.
+  // This makes projects deep-linkable, supports browser back/forward,
+  // and survives page refresh.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const selectedId = searchParams.get('project')
 
+  // Resolve the selected project object from the ID. useMemo so we
+  // don't re-filter the array on every render.
+  const selectedProject = useMemo(() => {
+    if (!selectedId) return null
+    return projects.find((p) => p.id === selectedId) || null
+  }, [selectedId])
+
+  // Open: set ?project=<id> in the URL (preserves any other params).
   const handleSelect = useCallback((project) => {
-    setSelectedProject(project)
-  }, [])
+    setSearchParams(
+      (prev) => {
+        prev.set('project', project.id)
+        return prev
+      },
+      { replace: false } // push to history so back button closes overlay
+    )
+  }, [setSearchParams])
 
+  // Close: remove ?project from the URL.
   const handleClose = useCallback(() => {
-    setSelectedProject(null)
-  }, [])
+    setSearchParams(
+      (prev) => {
+        prev.delete('project')
+        return prev
+      },
+      { replace: false }
+    )
+  }, [setSearchParams])
 
   return (
     <>
@@ -37,7 +65,7 @@ export default function ProjectsSection() {
         </div>
       </section>
 
-      {/* Full-screen detail overlay */}
+      {/* Full-screen detail overlay — rendered only when URL has ?project=... */}
       {selectedProject && (
         <Suspense fallback={null}>
           <ProjectOverlay

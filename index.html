@@ -4,7 +4,94 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>portfolio</title>
+
+    <!-- ───────────────────────────────────────────────────────────
+         Primary meta tags — title, description, author
+         ──────────────────────────────────────────────────────── -->
+    <title>Henok Kebede — Full-Stack Developer</title>
+    <meta name="title" content="Henok Kebede — Full-Stack Developer" />
+    <meta name="description" content="Full-stack developer building immersive 3D web experiences and interactive systems. Three.js, React, Node.js, TypeScript. Based in Ethiopia." />
+    <meta name="author" content="Henok Kebede" />
+    <meta name="keywords" content="Henok Kebede, full-stack developer, React, Three.js, WebGL, Node.js, TypeScript, portfolio, Ethiopia, web developer" />
+    <meta name="theme-color" content="#0a0a0f" />
+
+    <!-- ───────────────────────────────────────────────────────────
+         Open Graph / Facebook — controls link previews on Facebook,
+         LinkedIn, Slack, Discord, etc.
+         ──────────────────────────────────────────────────────── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://henok-kebede.vercel.app/" />
+    <meta property="og:title" content="Henok Kebede — Full-Stack Developer" />
+    <meta property="og:description" content="Full-stack developer building immersive 3D web experiences and interactive systems. Three.js, React, Node.js, TypeScript." />
+    <meta property="og:image" content="https://henok-kebede.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Henok Kebede — Full-Stack Developer portfolio" />
+    <meta property="og:site_name" content="Henok Kebede" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ───────────────────────────────────────────────────────────
+         Twitter Card — controls link previews on X/Twitter
+         ──────────────────────────────────────────────────────── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://henok-kebede.vercel.app/" />
+    <meta name="twitter:title" content="Henok Kebede — Full-Stack Developer" />
+    <meta name="twitter:description" content="Full-stack developer building immersive 3D web experiences and interactive systems. Three.js, React, Node.js, TypeScript." />
+    <meta name="twitter:image" content="https://henok-kebede.vercel.app/og-image.png" />
+    <meta name="twitter:image:alt" content="Henok Kebede — Full-Stack Developer portfolio" />
+    <!-- TODO: replace with your real X handle (without @) -->
+    <meta name="twitter:creator" content="@henokkebede" />
+
+    <!-- ───────────────────────────────────────────────────────────
+         Content-Security-Policy
+         ────────────────────────────────────────────────────────
+         Restricts what the browser is allowed to load/execute, blocking
+         most XSS vectors. Allowances:
+           - default-src 'self': everything from same origin by default
+           - script-src 'self': JS only from same origin (no inline, no eval)
+           - style-src 'self' 'unsafe-inline': Tailwind 4 injects styles
+             at runtime, needs 'unsafe-inline'
+           - img-src 'self' data: blob: : data URIs for SVGs, blob for
+             canvas textures and GLB binary blobs
+           - media-src 'self': music.mp3 and project videos
+           - font-src 'self': self-hosted woff2 (no Google Fonts)
+           - connect-src 'self': no external API calls
+           - object-src 'none': no Flash/Java/plugins
+           - base-uri 'self': prevent <base> tag injection
+
+         Note: 'unsafe-inline' for styles is required by Tailwind 4's
+         runtime injection and by inline style attributes used throughout
+         the React components. This is acceptable — inline styles are
+         trusted (author-controlled), and CSP still blocks the dangerous
+         case of attacker-injected inline <style> blocks if script-src
+         is also restricted (which it is).
+         ──────────────────────────────────────────────────────── -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none';" />
+
+    <!-- ───────────────────────────────────────────────────────────
+         Preload critical-path assets so the browser starts fetching
+         them in parallel with the JS bundle parse, rather than waiting
+         for the JS to request them.
+
+         Priority order (what blocks first paint / first frame):
+           1. Fonts — block text render
+           2. Hero GLB models — block 3D scene first frame
+         The hero scene needs typing.glb + chair.glb + desk_and_pc.glb
+         to render its first frame. sitting_and_talking.glb is only
+         needed when the user scrolls, so it's NOT preloaded.
+         ──────────────────────────────────────────────────────── -->
+
+    <!-- Fonts (self-hosted, woff2) -->
+    <link rel="preload" as="font" type="font/woff2" href="/urbanist-400.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/urbanist-700.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/urbanist-900.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/pro-font-windows-700.woff2" crossorigin />
+
+    <!-- Hero GLB models — needed for first 3D frame -->
+    <link rel="preload" as="fetch" href="/typing.glb" crossorigin />
+    <link rel="preload" as="fetch" href="/chair.glb" crossorigin />
+    <link rel="preload" as="fetch" href="/desk_and_pc.glb" crossorigin />
   </head>
   <body>
     <div id="root"></div>

@@ -36,7 +36,7 @@
   border-radius: 4px;
   transform: rotate(-4deg);
   margin-bottom: 8px;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .projects-title {
@@ -45,7 +45,7 @@
   color: #1a1a2e;
   letter-spacing: 0.01em;
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ─── Card grid ────────────────────────────────────────────── */

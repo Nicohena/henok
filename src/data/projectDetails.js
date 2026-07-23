@@ -1,11 +1,7 @@
-import streakon0 from '../assets/images/projects/streakon/streakon-0.webp'
-import streakon1 from '../assets/images/projects/streakon/streakon-1.webp'
-import streakon2 from '../assets/images/projects/streakon/streakon-2.webp'
-import streakon3 from '../assets/images/projects/streakon/streakon-3.webp'
-import Admin from '../assets/images/projects/streakon/Admin.png'
-import Authentication from '../assets/images/projects/streakon/Authentication.png'
-import hero from '../assets/images/projects/streakon/hero.png'
-import student from '../assets/images/projects/streakon/student.png'
+import Admin from '../assets/images/projects/streakon/Admin.webp'
+import Authentication from '../assets/images/projects/streakon/Authentication.webp'
+import hero from '../assets/images/projects/streakon/hero.webp'
+import student from '../assets/images/projects/streakon/student.webp'
 
 
 import payment from '../assets/images/projects/cubewar/payment.webp'
@@ -16,12 +12,12 @@ import landingPage from '../assets/images/projects/cubewar/landingpage.webp'
 import chatpage from '../assets/images/projects/cubewar/chatpage.webp'
 
 
-import admin from '../assets/images/projects/quibbo/admindashboard.png'
-import ai from '../assets/images/projects/quibbo/ai assistant.png'
-import content from '../assets/images/projects/quibbo/content creation.png'
-import certificate from '../assets/images/projects/quibbo/certificates and acheievements.png'
-import discussion from '../assets/images/projects/quibbo/disussion.png'
-import messages from '../assets/images/projects/quibbo/messages.png'
+import admin from '../assets/images/projects/quibbo/admindashboard.webp'
+import ai from '../assets/images/projects/quibbo/ai_assistant.webp'
+import content from '../assets/images/projects/quibbo/content_creation.webp'
+import certificate from '../assets/images/projects/quibbo/certificates_and_acheievements.webp'
+import discussion from '../assets/images/projects/quibbo/disussion.webp'
+import messages from '../assets/images/projects/quibbo/messages.webp'
 
 
 import sharkie0 from '../assets/images/projects/sharkie/sharkie-0.webp'
@@ -36,21 +32,19 @@ import items from '../assets/images/projects/pokedex/items.webp'
 import itemdetail from '../assets/images/projects/pokedex/itemdetail.webp'
 
 import videoCubewar from '../assets/videos/cubewar.mp4'
-import videoQuibbo from '../assets/videos/quibbo.mp4'
 import videoSharkie from '../assets/videos/sharkie.mp4'
-import videoPokedex from '../assets/videos/pokedex.mp4'
 import quiz from '../assets/videos/quiz.mp4'
 import menu from '../assets/videos/menu.mp4'
 
 
 export const projectDetailsById = {
-  streakon: [
+  'smart-campus': [
     { type: 'image', src: hero, alt: 'Hero section', caption: 'Hero section' },
     { type: 'image', src: Authentication, alt: 'Authentication', caption: 'Authentication' },
     { type: 'image', src: student, alt: 'Student dashboard', caption: 'Student dashboard' },
     { type: 'image', src: Admin, alt: 'Admin dashboard', caption: 'Admin dashboard' },
   ],
-  cubewar: [
+  gojo: [
     { type: 'video', src: videoCubewar, caption: 'Rental marketplace workflow' },
     { type: 'image', src: landingPage, alt: 'Landing page', caption: 'Landing page' },
     { type: 'image', src: chatpage, alt: 'Messenger', caption: 'Messenger' },
@@ -59,7 +53,7 @@ export const projectDetailsById = {
     { type: 'image', src: payment, alt: 'Payments', caption: 'Payments' },
     { type: 'image', src: notification, alt: 'Real-time notifications', caption: 'Real-time notifications' },
   ],
-  quibbo: [
+  millennium: [
     { type: 'video', src: quiz, caption: 'Taking a quiz', className: 'quiz-video' },
     { type: 'image', src: content, alt: 'Content creation', caption: 'Content creation', fit: 'contain' },
     { type: 'image', src: admin, alt: 'Admin dashboard', caption: 'Admin dashboard', fit: 'contain' },
@@ -68,7 +62,7 @@ export const projectDetailsById = {
     { type: 'image', src: discussion, alt: 'Discussion forums', caption: 'Discussion forums', fit: 'contain' },
     { type: 'image', src: messages, alt: 'Messages', caption: 'Messages', fit: 'contain' },
   ],
-  sharkie: [
+  'green-harvest': [
     { type: 'video', src: videoSharkie, caption: 'Agricultural marketplace workflow' },
     { type: 'image', src: sharkie0, alt: 'Marketplace catalog', caption: 'Marketplace catalog' },
     { type: 'image', src: sharkie1, alt: 'Farmer product management', caption: 'Farmer product management' },
@@ -76,7 +70,7 @@ export const projectDetailsById = {
     { type: 'image', src: sharkie3, alt: 'Delivery proof workflow', caption: 'Delivery proof workflow' },
     { type: 'image', src: sharkie4, alt: 'Admin analytics', caption: 'Admin analytics' },
   ],
-  pokedex: [
+  gebeta: [
     { type: 'video', src: menu, caption: 'Menu exploration' },
     { type: 'image', src: items, alt: 'Customer menu', caption: 'Customer menu' },
     { type: 'image', src: admindash, alt: 'Admin dashboard', caption: 'Admin dashboard' },

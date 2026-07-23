@@ -1,5 +1,7 @@
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { useReducedMotion } from '../hooks/useReducedMotion'
+import { useScrollProgress } from '../hooks/useScrollProgress'
 
 export default function SceneBackground() {
   const platformRef  = useRef()
@@ -10,20 +12,16 @@ export default function SceneBackground() {
   const shardRef1    = useRef()
   const shardRef2    = useRef()
   const shardRef3    = useRef()
-  const scrollY      = useRef(0)
   const frameCount   = useRef(0)
   const prevT        = useRef(-1)
-
-  useEffect(() => {
-    const onScroll = () => { scrollY.current = window.scrollY }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  const reduceMotion = useReducedMotion()
+  // Shared scroll listener — progressRef is read inside useFrame without
+  // triggering re-renders. innerHeight is cached internally, avoiding
+  // the layout-reflow penalty of calling window.innerHeight per frame.
+  const { progressRef } = useScrollProgress({ disabled: reduceMotion })
 
   useFrame(({ scene, clock }) => {
-    const currentY = scrollY.current
-    const height = window.innerHeight
-    const t = Math.min(currentY / (height * 0.75), 1)
+    const t = progressRef.current
 
     // Clear background once per value change, not every frame
     if (scene.background !== null) scene.background = null
@@ -55,6 +53,10 @@ export default function SceneBackground() {
       updateOpacity(shardRef3, 1)
       prevT.current = t
     }
+
+    // Reduced motion: opacity still responds to scroll, but all
+    // continuous rotation/pulsing/orbiting animations are frozen.
+    if (reduceMotion) return
 
     // Animations — only run when visible
     const time = clock.getElapsedTime()

@@ -1,0 +1,38 @@
+# Netlify headers and redirect rules
+# This file configures HTTP response headers for Netlify deployments.
+# For Vercel, see vercel.json (both are included so you can pick your host).
+
+/*
+  # Security headers (mirror the CSP in index.html for defense in depth)
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none';
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+
+# Long-cache immutable assets (filename-hashed by Vite build)
+/*.glb
+  Content-Type: model/gltf-binary
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Content-Type: font/woff2
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/*.mp3
+  Content-Type: audio/mpeg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.mp4
+  Content-Type: video/mp4
+  Cache-Control: public, max-age=31536000, immutable
+
+# SPA fallback — all routes serve index.html (for react-router)
+/*
+  /index.html
+  200

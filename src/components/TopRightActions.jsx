@@ -12,7 +12,9 @@ export default function TopRightActions() {
       audioRef.current.loop = true;
       audioRef.current.volume = 0.15;
       audioRef.current.muted = false;
-      audioRef.current.preload = 'auto';
+      // preload='none' — don't fetch the 2.3MB mp3 until the user
+      // actually interacts. Saves bandwidth for visitors who bounce.
+      audioRef.current.preload = 'none';
     }
     return audioRef.current;
   };
@@ -25,32 +27,43 @@ export default function TopRightActions() {
       audio.muted = false;
       audio.play().then(() => {
         setIsMuted(false);
-        removeInteractionListeners();
       }).catch(() => {
+        // Autoplay blocked or fetch failed — stay muted, no error UI
         setIsMuted(true);
       });
     };
 
+    // Single listener, fires once on the first user interaction of any
+    // kind, then removes itself. Previously this attached FOUR separate
+    // capture-mode listeners (pointerdown + click + keydown + touchstart)
+    // that all fired on every interaction — overkill and noisy.
+    //
+    // pointerdown covers mouse + touch + pen in one event. The { once: true }
+    // option auto-removes the listener after the first fire, so we don't
+    // need manual removeEventListener bookkeeping.
+    //
+    // We skip the sound button itself so clicking mute doesn't double-fire
+    // (the toggleSound handler manages play/pause on its own).
     const handleFirstInteraction = (event) => {
       if (event.target?.closest?.('.sound-btn')) return;
       startMusic();
     };
 
-    const removeInteractionListeners = () => {
-      window.removeEventListener('pointerdown', handleFirstInteraction, true);
-      window.removeEventListener('click', handleFirstInteraction, true);
-      window.removeEventListener('keydown', handleFirstInteraction, true);
-      window.removeEventListener('touchstart', handleFirstInteraction, true);
-    };
-
+    // Try once immediately (will fail silently if autoplay is blocked,
+    // which is the expected behavior on all modern browsers without
+    // prior user interaction — the listener below handles the real start).
     startMusic();
-    window.addEventListener('pointerdown', handleFirstInteraction, { capture: true, passive: true });
-    window.addEventListener('click', handleFirstInteraction, true);
-    window.addEventListener('keydown', handleFirstInteraction, true);
-    window.addEventListener('touchstart', handleFirstInteraction, { capture: true, passive: true });
+    window.addEventListener('pointerdown', handleFirstInteraction, {
+      capture: true,
+      passive: true,
+      once: true,
+    });
 
     return () => {
-      removeInteractionListeners();
+      // { once: true } means the listener auto-removed itself if it fired,
+      // but if the component unmounts before any interaction we still
+      // need to clean up. removeEventListener is a no-op if already removed.
+      window.removeEventListener('pointerdown', handleFirstInteraction, true);
       if (audioRef.current) {
         audioRef.current.pause();
       }

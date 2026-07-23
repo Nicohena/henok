@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, memo } from 'react';
 import { Renderer, Program, Triangle, Mesh } from 'ogl';
 
 const DEFAULT_COLOR = '#ffffff';
@@ -30,7 +30,7 @@ const getAnchorAndDir = (origin, w, h) => {
   }
 };
 
-const LightRays = ({
+const LightRays = memo(function LightRays({
   raysOrigin = 'top-center',
   raysColor = DEFAULT_COLOR,
   raysSpeed = 1,
@@ -44,7 +44,7 @@ const LightRays = ({
   noiseAmount = 0.0,
   distortion = 0.0,
   className = ''
-}) => {
+}) {
   const containerRef = useRef(null);
   const uniformsRef = useRef(null);
   const rendererRef = useRef(null);
@@ -399,6 +399,6 @@ void main() {
       className={`w-full h-full pointer-events-none z-[0] overflow-hidden absolute inset-0 ${className}`.trim()}
     />
   );
-};
+});
 
 export default LightRays;

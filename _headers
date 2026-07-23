@@ -1,0 +1,26 @@
+# Cloudflare Pages / GitHub Pages headers
+# Format: https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none';
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+/*.glb
+  Content-Type: model/gltf-binary
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Content-Type: font/woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.mp3
+  Content-Type: audio/mpeg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.mp4
+  Content-Type: video/mp4
+  Cache-Control: public, max-age=31536000, immutable

@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+   Font tokens — use these CSS variables everywhere instead of
+   hardcoding font-family strings. Two families only:
+     --font-sans: Urbanist (display + body, 400/700/900)
+     --font-mono: Pro Font Windows (loading screen, glass panels)
+   Both are self-hosted in /public — no external requests.
+   ─────────────────────────────────────────────────────────── */
+:root {
+  --font-sans: 'Urbanist', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Pro Font Windows', 'Courier New', monospace;
+}
+
 @font-face {
   font-family: 'Urbanist';
   src: url('/urbanist-400.woff2') format('woff2');
@@ -48,11 +60,50 @@
 
 html, body {
   background: #f5f0e8;
-  font-family: 'Urbanist', 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
   overflow-x: clip;
   width: 100vw;
 }
 
 #root {
   width: 100vw;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   prefers-reduced-motion: disable all non-essential animations
+   ─────────────────────────────────────────────────────────────
+   When the user has requested reduced motion at the OS level,
+   we kill: loading screen grid pan, brand flicker, bar shimmer,
+   dot pulse, navbar transitions, project overlay slide-up,
+   preview card hover lift, and any CSS transitions on decorative
+   elements. Essential transitions (loading bar width, overlay
+   visibility) keep their final state immediately.
+   ─────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Loading screen: keep elements visible, just don't animate */
+  .loading-grid,
+  .loading-brand-first,
+  .loading-brand-last,
+  .loading-bar-fill,
+  .loading-dot {
+    animation: none !important;
+  }
+
+  /* Project overlay: appear instantly instead of sliding up */
+  .project-overlay {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Preview card: disable hover lift */
+  .preview-card:hover {
+    transform: none !important;
+  }
 }
