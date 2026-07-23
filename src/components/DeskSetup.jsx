@@ -16,7 +16,7 @@ export default function DeskSetup() {
   return (
     <primitive
       object={scene}
-      position={[2, -0.5, 0]}
+      position={[2, -1.6, 0]}
       scale={0.5}
       rotation={[0, Math.PI + Math.PI * 0.15, 0]}
     />

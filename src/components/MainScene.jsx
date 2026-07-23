@@ -149,7 +149,7 @@ export default function MainScene({ onProgress, onLoaded }) {
             <SceneContent reduceMotion={reduceMotion} />
             {/* Ambient contact shadows for soft ambient occlusion */}
             <ContactShadows
-              position={[0, -0.5, 0]}
+              position={[0, -1.6, 0]}
               opacity={0.08}
               scale={20}
               blur={2.5}
@@ -158,7 +158,7 @@ export default function MainScene({ onProgress, onLoaded }) {
             />
 
             {/* Directional light shadow receiver floor */}
-            <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+            <mesh position={[0, -1.6, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
               <planeGeometry args={[50, 50]} />
               <shadowMaterial opacity={0.03} />
             </mesh>
