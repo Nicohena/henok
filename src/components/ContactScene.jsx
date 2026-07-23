@@ -14,12 +14,26 @@ export default function ContactScene() {
       actions['mixamo.com'].reset().fadeIn(0.5).play()
     }
 
-    // Enable shadows for waving character
+    // Enable shadows + recolor waving character to match hero scene
+    // (warm brown skin + charcoal hoodie). Same Mixamo Beta materials as
+    // typing.glb — see SceneContent.jsx for color rationale.
+    const SKIN_COLOR    = '#8B5A3C'  // warm brown
+    const CLOTHES_COLOR = '#2A2A2A'  // charcoal hoodie
+
     if (waving.scene) {
       waving.scene.traverse((child) => {
-        if (child.isMesh) {
+        if (child.isMesh && child.material) {
+          // Clone material to avoid mutating shared gltf cache
+          child.material = child.material.clone()
           child.castShadow = true
           child.receiveShadow = true
+
+          const matName = child.material.name || ''
+          if (matName.includes('Joints') || matName.includes('joints')) {
+            child.material.color.set(CLOTHES_COLOR)
+          } else if (matName.includes('Limbs') || matName.includes('limbs') || matName.includes('High')) {
+            child.material.color.set(SKIN_COLOR)
+          }
         }
       })
     }

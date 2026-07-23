@@ -60,12 +60,32 @@ export default function SceneContent({ reduceMotion = false }) {
     }
     fadeMaterialsRef.current = fadeMats
 
-    // Only traverse character once to enable shadows
+    // Recolor the Mixamo "Beta" character to a warm brown skin tone with
+    // a charcoal hoodie. The model has 2 materials:
+    //   [0] "Beta_Joints_MAT1"     — under-layer (joints/skeleton) → charcoal clothing
+    //   [1] "Beta_HighLimbsGeoSG3" — outer layer (skin/limbs) → warm brown
+    // We clone the material before mutating so we don't affect the shared
+    // gltf cache (other scenes loading the same .glb would otherwise inherit
+    // our colors).
+    const SKIN_COLOR   = '#8B5A3C'  // warm brown
+    const CLOTHES_COLOR = '#2A2A2A' // charcoal hoodie
+
     if (charRef.current) {
       charRef.current.traverse((child) => {
         if (child.isMesh && child.material) {
+          // Clone material to avoid mutating the shared gltf cache
+          child.material = child.material.clone()
           child.castShadow = true
           child.receiveShadow = true
+
+          const matName = child.material.name || ''
+          if (matName.includes('Joints') || matName.includes('joints')) {
+            // Under-layer → clothing color
+            child.material.color.set(CLOTHES_COLOR)
+          } else if (matName.includes('Limbs') || matName.includes('limbs') || matName.includes('High')) {
+            // Outer layer → skin color
+            child.material.color.set(SKIN_COLOR)
+          }
         }
       })
     }
