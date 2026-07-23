@@ -31,14 +31,16 @@ export default function ContactSection() {
             gl={{ alpha: true, antialias: true }}
           >
             <Suspense fallback={null}>
-              <ambientLight intensity={1.2} />
+              <ambientLight intensity={1.5} />
               <directionalLight
                 position={[5, 8, 5]}
-                intensity={1.5}
+                intensity={2.5}
                 castShadow
                 shadow-mapSize={[512, 512]}
               />
-              <directionalLight position={[-5, 3, -5]} intensity={0.4} />
+              <directionalLight position={[-5, 4, 3]} intensity={1.0} color="#fff5e6" />
+              <directionalLight position={[0, 5, -8]} intensity={0.8} color="#e6f0ff" />
+              <hemisphereLight args={['#ffffff', '#444433', 0.7]} />
 
               <ContactScene />
 

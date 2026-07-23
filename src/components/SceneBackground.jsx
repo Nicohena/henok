@@ -95,15 +95,27 @@ export default function SceneBackground() {
 
   return (
     <>
-      <ambientLight intensity={0.6} />
-      <directionalLight 
-        position={[5, 5, 5]} 
-        intensity={1} 
-        castShadow 
+      {/* Lighting — boosted to compensate for removal of <Environment preset="warehouse" />
+          which previously provided image-based lighting (IBL). meshStandardMaterial
+          needs strong ambient + multiple directional lights to look properly lit
+          without IBL. These values are tuned to match the warm, bright look the
+          warehouse HDR provided. */}
+      <ambientLight intensity={1.2} />
+      {/* Key light — main directional from front-top-right, casts shadows */}
+      <directionalLight
+        position={[5, 8, 5]}
+        intensity={2.5}
+        castShadow
         shadow-mapSize={[512, 512]}
       >
         <orthographicCamera attach="shadow-camera" args={[-10, 10, 10, -10]} />
       </directionalLight>
+      {/* Fill light — softens shadows from the left, no shadow casting */}
+      <directionalLight position={[-5, 4, 3]} intensity={1.0} color="#fff5e6" />
+      {/* Rim light — back-top, adds edge definition and separates model from bg */}
+      <directionalLight position={[0, 5, -8]} intensity={0.8} color="#e6f0ff" />
+      {/* Hemisphere light — sky/ground gradient for natural ambient fill */}
+      <hemisphereLight args={['#ffffff', '#444433', 0.6]} />
 
       {/* High-tech Sci-Fi Pedestal Group */}
       <group position={[0, -0.5, 0.6]}>
