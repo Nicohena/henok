@@ -55,7 +55,7 @@
              canvas textures and GLB binary blobs
            - media-src 'self': music.mp3 and project videos
            - font-src 'self': self-hosted woff2 (no Google Fonts)
-           - connect-src 'self': no external API calls
+           - connect-src 'self' blob:: no external API calls
            - object-src 'none': no Flash/Java/plugins
            - base-uri 'self': prevent <base> tag injection
 
@@ -65,9 +65,16 @@
          trusted (author-controlled), and CSP still blocks the dangerous
          case of attacker-injected inline <style> blocks if script-src
          is also restricted (which it is).
+
+         Note: 'wasm-unsafe-eval' for scripts is required because the
+         MeshoptDecoder (used to decompress EXT_meshopt_compression
+         in the GLB models) compiles WebAssembly at runtime via
+         WebAssembly.instantiate(). This keyword specifically allows
+         WASM compilation WITHOUT allowing eval() or inline scripts,
+         so XSS surface is unchanged.
          ──────────────────────────────────────────────────────── -->
     <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none';" />
+          content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self'; connect-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none';" />
 
     <!-- ───────────────────────────────────────────────────────────
          Preload critical-path assets so the browser starts fetching

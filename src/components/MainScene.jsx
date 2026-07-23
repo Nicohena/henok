@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import { Environment, ContactShadows } from "@react-three/drei";
+import { ContactShadows } from "@react-three/drei";
 import { Suspense, useEffect, useRef, useCallback, useState } from "react";
 import SceneContent from "./SceneContent";
 import SceneBackground from "./SceneBackground";
@@ -162,7 +162,13 @@ export default function MainScene({ onProgress, onLoaded }) {
               <planeGeometry args={[50, 50]} />
               <shadowMaterial opacity={0.03} />
             </mesh>
-            <Environment preset="warehouse" />
+            {/* Note: <Environment preset="warehouse" /> was removed because it
+                fetches HDR files from an external CDN (pmndrs/drei-assets),
+                which our strict CSP connect-src 'self' blocks. The scene
+                already has ambient + directional lights from SceneBackground,
+                so lighting still works — just without image-based reflections.
+                To restore IBL, either self-host the .hdr file or add the CDN
+                URL to connect-src in index.html + deploy configs. */}
           </Suspense>
         </Canvas>
       </div>
