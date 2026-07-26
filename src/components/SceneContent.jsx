@@ -26,20 +26,18 @@ export default function SceneContent({ reduceMotion = false }) {
   const talkingActionRef = useRef(null)
 
   // Hero → About states
-  // Note: Y positions adjusted for the new Boy01 character model which
-  // has a different vertical origin than the old Beta model.
-  // Rotation adjusted by +PI (180°) because the new Boy01 model faces
-  // the opposite direction by default compared to the old Beta model.
-  // Without this, the character's back faces the desk instead of facing
-  // the keyboard/monitor.
+  // The new Boy01 model has a different default facing direction than
+  // the old Beta model. After visual testing, the original rotation
+  // values (without +PI offset) correctly face the character toward
+  // the desk in hero pose and toward the camera in about pose.
   const heroX        = 1
   const heroY        = -1.6
   const heroScale    = 1.8
-  const heroRotation = Math.PI * -0.35 + Math.PI   // +PI to face desk
+  const heroRotation = Math.PI * -0.35              // face desk (right)
   const aboutX        = 0
   const aboutY        = -1.6
   const aboutScale    = 2.3
-  const aboutRotation = Math.PI * 1.0 + Math.PI    // +PI to face camera
+  const aboutRotation = Math.PI * 1.0               // face camera
 
   useEffect(() => {
     if (!mixer || !typingActions) return
@@ -47,9 +45,18 @@ export default function SceneContent({ reduceMotion = false }) {
     const typingAction = typingActions[Object.keys(typingActions)[0]]
     if (typingAction) typingAction.reset().play()
 
-    const talkingClip = talking.animations[0]
-    if (talkingClip) {
-      talkingActionRef.current = mixer.clipAction(talkingClip, charRef.current)
+    // The sitting_and_talking.glb has 2 animations:
+    //   [0] "Armature|mixamo.com|Layer0" (~9.6s) — the SITTING animation
+    //   [1] "mixamo.com" (~16.5s) — typing animation (duplicate of typing.glb)
+    // We must use [0] — the unique sitting clip. Using [1] would play typing.
+    // Find the sitting clip by name, falling back to the first non-"mixamo.com" clip.
+    const allClips = talking.animations || []
+    const sittingClip =
+      allClips.find(c => c.name === 'Armature|mixamo.com|Layer0') ||
+      allClips.find(c => c.name !== 'mixamo.com') ||
+      allClips[0]
+    if (sittingClip) {
+      talkingActionRef.current = mixer.clipAction(sittingClip, charRef.current)
     }
 
     const fadeMats = []
@@ -154,19 +161,17 @@ export default function SceneContent({ reduceMotion = false }) {
       >
         <primitive object={typing.scene} castShadow receiveShadow />
         {/* Office chair — positioned under the character's hips.
-            The chair.glb has its origin at the base, so we position it
-            slightly below the character origin. Scale 0.0083 matches
-            the character's 0.01 root scale × a slight downscale so the
-            chair isn't too large. Rotation PI faces the chair back
-            toward the character's back.
-            Tuned for the new Boy01 model: moved back (z=-0.2) so the
-            seat is under the hips, lowered (y=-0.15) so the character
-            sits ON the seat rather than floating above it. */}
+            The chair must face the SAME direction as the character so
+            the seat is under the character and the back is behind.
+            Character rotation: -0.35π (toward desk, right).
+            Chair rotation matches so the seat faces the desk and the
+            back is behind the character. Scale 0.0083 matches the
+            character's 0.01 root scale × slight downscale. */}
         <primitive
           object={chair.scene}
           position={[0, -0.15, -0.2]}
           scale={0.0083}
-          rotation={[0, Math.PI, 0]}
+          rotation={[0, Math.PI * -0.35, 0]}
           castShadow
           receiveShadow
         />

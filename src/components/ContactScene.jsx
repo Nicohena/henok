@@ -9,20 +9,21 @@ export default function ContactScene() {
   const { actions } = useAnimations(waving.animations, wavingRef)
 
   useEffect(() => {
-    // The new waving.glb has 3 animations exported from Blender:
-    //   [0] "Armature|mixamo.com|Layer0" (Blender's internal name)
-    //   [1] "mixamo.com"                (standard Mixamo name)
-    //   [2] "mixamo.com.001"            (duplicate)
-    // drei's useAnimations keys the `actions` object by animation name,
-    // but the duplicate "mixamo.com.001" can shadow "mixamo.com" in some
-    // cases. To be robust, we try the preferred name first, then fall
-    // back to the first available action.
+    // The waving.glb exported from Blender contains 3 animations:
+    //   [0] "Armature|mixamo.com|Layer0" (~9.6s) — sitting idle (NOT waving)
+    //   [1] "mixamo.com"                  (~16.5s) — typing animation (NOT waving)
+    //   [2] "mixamo.com.001"              (~0.6s) — THE ACTUAL WAVING gesture
+    //
+    // The "mixamo.com" (16.5s) animation is the typing animation embedded
+    // in all three model files as a base layer. The actual wave is the
+    // short 0.6s clip "mixamo.com.001" — a brief arm-raise wave gesture.
+    // We must select this specific clip, not the default "mixamo.com".
     if (actions) {
       const actionNames = Object.keys(actions)
       const preferredAction =
-        actions['mixamo.com'] ||              // standard Mixamo name
-        actions['Armature|mixamo.com|Layer0'] ||  // Blender export name
-        (actionNames.length > 0 ? actions[actionNames[0]] : null)  // fallback: first available
+        actions['mixamo.com.001'] ||              // ← the actual waving animation (0.6s)
+        actions['mixamo.com|Layer0'] ||            // alternate Blender name
+        (actionNames.length > 0 ? actions[actionNames[actionNames.length - 1]] : null)  // fallback: LAST action (shortest, most likely the gesture)
 
       if (preferredAction) {
         preferredAction.reset().fadeIn(0.5).play()
@@ -61,14 +62,14 @@ export default function ContactScene() {
   return (
     <group>
       {/* Waving character — centered in canvas, facing camera.
-          New Boy01 model: scale 2.5, Y=-1.5 (same as before), rotation PI
-          to face camera (new model faces opposite direction by default). */}
+          No Y-rotation needed — the Boy01 model faces -Z (toward camera)
+          by default after removing the erroneous +PI offset. */}
       <primitive
         ref={wavingRef}
         object={waving.scene}
         position={[0, -1.5, 0]}
         scale={2.5}
-        rotation={[0, Math.PI, 0]}
+        rotation={[0, 0, 0]}
       />
 
       {/* Contact environment (boxes / envelopes) — to the right and slightly back */}
