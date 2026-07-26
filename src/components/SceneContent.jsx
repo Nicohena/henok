@@ -30,19 +30,29 @@ export default function SceneContent({ reduceMotion = false }) {
   // the old Beta model. After visual testing, the original rotation
   // values (without +PI offset) correctly face the character toward
   // the desk in hero pose and toward the camera in about pose.
-  const heroX        = 1
-  const heroY        = -1.6
-  const heroScale    = 1.8
-  const heroRotation = Math.PI * -0.35              // face desk (right)
+  const heroX        = 0.9
+  const heroY        = -1.7
+  const heroZ        = 0.8
+  const heroScale    = 2
+  const heroRotation = Math.PI * 0.6             // face desk (right)
   const aboutX        = 0
-  const aboutY        = -1.6
-  const aboutScale    = 2.3
-  const aboutRotation = Math.PI * 1.0               // face camera
+  const aboutY        = -0.3
+  const aboutZ        = 1
+  const aboutScale    = 1.9
+  const aboutRotation = Math.PI * 0.           // face camera
+  const chairRef      = useRef()
 
   useEffect(() => {
     if (!mixer || !typingActions) return
 
-    const typingAction = typingActions[Object.keys(typingActions)[0]]
+    // Fallback logic to ensure we get the right typing clip
+    const typingKeys = Object.keys(typingActions)
+    let typingClipKey = typingKeys[0]
+    // If the first one is the sitting one, try to find another
+    if (typingClipKey.includes("Layer0") && typingKeys.length > 1) {
+      typingClipKey = typingKeys[1]
+    }
+    const typingAction = typingActions[typingClipKey]
     if (typingAction) typingAction.reset().play()
 
     // The sitting_and_talking.glb has 2 animations:
@@ -99,8 +109,10 @@ export default function SceneContent({ reduceMotion = false }) {
     if (reduceMotion) {
       charRef.current.position.x = heroX
       charRef.current.position.y = heroY
+      charRef.current.position.z = heroZ
       charRef.current.scale.setScalar(heroScale)
       charRef.current.rotation.y = heroRotation
+      charRef.current.rotation.x = 0
       if (fadeGroupRef.current) fadeGroupRef.current.visible = true
       if (fadeMaterialsRef.current.length > 0) {
         fadeMaterialsRef.current.forEach((mat) => { mat.opacity = 1 })
@@ -114,8 +126,11 @@ export default function SceneContent({ reduceMotion = false }) {
     // Always lerp position/scale/rotation (cheap, must be smooth)
     charRef.current.position.x = THREE.MathUtils.lerp(heroX, aboutX, t)
     charRef.current.position.y = THREE.MathUtils.lerp(heroY, aboutY, t)
+    charRef.current.position.z = THREE.MathUtils.lerp(heroZ, aboutZ, t)
     charRef.current.scale.setScalar(THREE.MathUtils.lerp(heroScale, aboutScale, t))
     charRef.current.rotation.y = THREE.MathUtils.lerp(heroRotation, aboutRotation, t)
+    // Tilt character slightly toward camera in about section so face is visible
+    charRef.current.rotation.x = THREE.MathUtils.lerp(0, -0.15, t)
 
     // Fade out desk + pot — only when t is changing or every 3rd frame
     if (fadeGroupRef.current && fadeMaterialsRef.current.length > 0) {
@@ -155,25 +170,23 @@ export default function SceneContent({ reduceMotion = false }) {
 
       <group
         ref={charRef}
-        position={[heroX, heroY, 0.99]}
+        position={[heroX, heroY, heroZ]}
         scale={heroScale}
         rotation={[0, heroRotation, 0]}
       >
         <primitive object={typing.scene} castShadow receiveShadow />
         {/* Office chair — positioned under the character's hips.
-            SCALE ANALYSIS:
-              Character: internal scale 0.01 (Mixamo) × group scale 1.8 = 0.018 effective
-              Chair:     internal scale ~45 (Blender) × primitive scale X = 45X effective
-              To match character (0.018), chair primitive scale = 0.018/45 ≈ 0.0004
-            The old value 0.0083 made the chair ~20× too large (dominating the scene).
-            Position [0, -0.8, -0.3]: lowered Y so seat is at character's hip height,
-            moved back in Z so seat is behind the character's back.
-            Rotation -0.35π matches character facing direction (toward desk). */}
+            The chair is a child of the character group, so it inherits the
+            parent's rotation. We set chair rotation to [0, 0, 0] so it
+            aligns with the character's facing direction automatically.
+            Position tuned so the seat is at the character's hip height
+            and centered behind them. */}
         <primitive
+          ref={chairRef}
           object={chair.scene}
-          position={[0, -0.7, -0.3]}
-          scale={0.005}
-          rotation={[0, Math.PI * -0.35, 0]}
+          position={[0.05, 0.02, -0.15]}
+          scale={0.007}
+          rotation={[0, 0, 0]}
           castShadow
           receiveShadow
         />
