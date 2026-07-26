@@ -45,13 +45,15 @@ export default function ContactScene() {
 
   return (
     <group>
-      {/* Waving character — centred in canvas, slightly left */}
+      {/* Waving character — centered in canvas, facing camera.
+          New Boy01 model: scale 2.5, Y=-1.5 (same as before), rotation PI
+          to face camera (new model faces opposite direction by default). */}
       <primitive
         ref={wavingRef}
         object={waving.scene}
         position={[0, -1.5, 0]}
-        scale={2}
-        rotation={[0, 0, 0]}
+        scale={2.5}
+        rotation={[0, Math.PI, 0]}
       />
 
       {/* Contact environment (boxes / envelopes) — to the right and slightly back */}

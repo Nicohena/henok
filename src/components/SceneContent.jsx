@@ -27,17 +27,19 @@ export default function SceneContent({ reduceMotion = false }) {
 
   // Hero → About states
   // Note: Y positions adjusted for the new Boy01 character model which
-  // has a different vertical origin than the old Beta model. The new
-  // model's mesh extends further below the origin, so we lower Y to
-  // keep the character seated on the chair/floor without floating.
+  // has a different vertical origin than the old Beta model.
+  // Rotation adjusted by +PI (180°) because the new Boy01 model faces
+  // the opposite direction by default compared to the old Beta model.
+  // Without this, the character's back faces the desk instead of facing
+  // the keyboard/monitor.
   const heroX        = 1
   const heroY        = -1.6
   const heroScale    = 1.8
-  const heroRotation = Math.PI * -0.35
+  const heroRotation = Math.PI * -0.35 + Math.PI   // +PI to face desk
   const aboutX        = 0
   const aboutY        = -1.6
   const aboutScale    = 2.3
-  const aboutRotation = Math.PI * 1.0
+  const aboutRotation = Math.PI * 1.0 + Math.PI    // +PI to face camera
 
   useEffect(() => {
     if (!mixer || !typingActions) return
