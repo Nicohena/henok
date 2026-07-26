@@ -161,16 +161,18 @@ export default function SceneContent({ reduceMotion = false }) {
       >
         <primitive object={typing.scene} castShadow receiveShadow />
         {/* Office chair — positioned under the character's hips.
-            The chair must face the SAME direction as the character so
-            the seat is under the character and the back is behind.
-            Character rotation: -0.35π (toward desk, right).
-            Chair rotation matches so the seat faces the desk and the
-            back is behind the character. Scale 0.0083 matches the
-            character's 0.01 root scale × slight downscale. */}
+            SCALE ANALYSIS:
+              Character: internal scale 0.01 (Mixamo) × group scale 1.8 = 0.018 effective
+              Chair:     internal scale ~45 (Blender) × primitive scale X = 45X effective
+              To match character (0.018), chair primitive scale = 0.018/45 ≈ 0.0004
+            The old value 0.0083 made the chair ~20× too large (dominating the scene).
+            Position [0, -0.8, -0.3]: lowered Y so seat is at character's hip height,
+            moved back in Z so seat is behind the character's back.
+            Rotation -0.35π matches character facing direction (toward desk). */}
         <primitive
           object={chair.scene}
-          position={[0, -0.15, -0.2]}
-          scale={0.0083}
+          position={[0, -0.7, -0.3]}
+          scale={0.005}
           rotation={[0, Math.PI * -0.35, 0]}
           castShadow
           receiveShadow
