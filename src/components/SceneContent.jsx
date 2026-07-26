@@ -153,9 +153,18 @@ export default function SceneContent({ reduceMotion = false }) {
         rotation={[0, heroRotation, 0]}
       >
         <primitive object={typing.scene} castShadow receiveShadow />
+        {/* Office chair — positioned under the character's hips.
+            The chair.glb has its origin at the base, so we position it
+            slightly below the character origin. Scale 0.0083 matches
+            the character's 0.01 root scale × a slight downscale so the
+            chair isn't too large. Rotation PI faces the chair back
+            toward the character's back.
+            Tuned for the new Boy01 model: moved back (z=-0.2) so the
+            seat is under the hips, lowered (y=-0.15) so the character
+            sits ON the seat rather than floating above it. */}
         <primitive
           object={chair.scene}
-          position={[0, -0.05, 0]}
+          position={[0, -0.15, -0.2]}
           scale={0.0083}
           rotation={[0, Math.PI, 0]}
           castShadow

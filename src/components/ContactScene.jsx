@@ -9,9 +9,24 @@ export default function ContactScene() {
   const { actions } = useAnimations(waving.animations, wavingRef)
 
   useEffect(() => {
-    // Play the waving animation on loop
-    if (actions && actions['mixamo.com']) {
-      actions['mixamo.com'].reset().fadeIn(0.5).play()
+    // The new waving.glb has 3 animations exported from Blender:
+    //   [0] "Armature|mixamo.com|Layer0" (Blender's internal name)
+    //   [1] "mixamo.com"                (standard Mixamo name)
+    //   [2] "mixamo.com.001"            (duplicate)
+    // drei's useAnimations keys the `actions` object by animation name,
+    // but the duplicate "mixamo.com.001" can shadow "mixamo.com" in some
+    // cases. To be robust, we try the preferred name first, then fall
+    // back to the first available action.
+    if (actions) {
+      const actionNames = Object.keys(actions)
+      const preferredAction =
+        actions['mixamo.com'] ||              // standard Mixamo name
+        actions['Armature|mixamo.com|Layer0'] ||  // Blender export name
+        (actionNames.length > 0 ? actions[actionNames[0]] : null)  // fallback: first available
+
+      if (preferredAction) {
+        preferredAction.reset().fadeIn(0.5).play()
+      }
     }
 
     // Enable shadows for the new waving character. New Mixamo "Boy01"
