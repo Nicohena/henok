@@ -68,7 +68,7 @@ export default function ContactScene() {
         ref={wavingRef}
         object={waving.scene}
         position={[0, -1.5, 0]}
-        scale={2.5}
+        scale={2}
         rotation={[0, 0, 0]}
       />
 
