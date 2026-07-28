@@ -30,6 +30,7 @@ import admindash from '../assets/images/projects/pokedex/admindash.webp'
 import saveditems from '../assets/images/projects/pokedex/saveditems.webp'
 import items from '../assets/images/projects/pokedex/items.webp'
 import itemdetail from '../assets/images/projects/pokedex/itemdetail.webp'
+import qr from '../assets/images/projects/pokedex/QR.png'
 
 import videoCubewar from '../assets/videos/cubewar.mp4'
 import videoSharkie from '../assets/videos/sharkie.mp4'
@@ -72,6 +73,7 @@ export const projectDetailsById = {
   ],
   gebeta: [
     { type: 'video', src: menu, caption: 'Menu exploration' },
+    {type:'image',src: qr,caption:"QR image"},
     { type: 'image', src: items, alt: 'Customer menu', caption: 'Customer menu' },
     { type: 'image', src: admindash, alt: 'Admin dashboard', caption: 'Admin dashboard' },
     { type: 'image', src: saveditems, alt: 'Saved items', caption: 'Saved items' },
