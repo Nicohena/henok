@@ -72,8 +72,8 @@ export const projectDetailsById = {
     { type: 'image', src: sharkie4, alt: 'Admin analytics', caption: 'Admin analytics' },
   ],
   gebeta: [
-    { type: 'video', src: menu, caption: 'Menu exploration' },
-    {type:'image',src: qr,caption:"QR image"},
+    { type: 'video', src: menu, caption: 'Menu exploration',fit:'contain' },
+    {type:'  image'  ,src: qr,caption:"QR image",fit:'contain'},
     { type: 'image', src: items, alt: 'Customer menu', caption: 'Customer menu' },
     { type: 'image', src: admindash, alt: 'Admin dashboard', caption: 'Admin dashboard' },
     { type: 'image', src: saveditems, alt: 'Saved items', caption: 'Saved items' },
