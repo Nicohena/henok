@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import TopRightActions from "./components/TopRightActions";
 import LoadingScreen from "./components/LoadingScreen";
 import ErrorBoundary from "./components/ErrorBoundary";
+import ScrollHint from "./components/ScrollHint";
 import { subscribeScroll } from "./hooks/useScrollProgress";
 import { contactLoader } from "./utils/contactLoader";
 
@@ -285,6 +286,7 @@ function App() {
               <MainScene onProgress={handleProgress} onLoaded={handleLoaded} />
             </Suspense>
           </HeroErrorBoundary>
+          <ScrollHint isHeroLoaded={isLoaded || heroFailed} />
         </div>
         <div id="projects" style={{ minHeight: "100vh" }}>
           <LazyWhenNear>

@@ -1,0 +1,158 @@
+.hero-scroll-hint {
+  position: absolute;
+  top: calc(100vh - 6rem);
+  top: calc(100dvh - 6rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.4s;
+}
+
+.hero-scroll-hint.is-visible {
+  opacity: 1;
+  visibility: visible;
+  animation: hintFloat 2.4s ease-in-out infinite;
+}
+
+.hero-scroll-hint.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(12px);
+}
+
+/* Mouse outline */
+.mouse-indicator {
+  width: 22px;
+  height: 36px;
+  border: 2px solid rgba(42, 42, 42, 0.7);
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background: rgba(245, 240, 232, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Mouse wheel animating downward */
+.mouse-wheel {
+  position: absolute;
+  top: 6px;
+  width: 3.5px;
+  height: 7px;
+  background: #FF6B2B;
+  border-radius: 2px;
+  animation: wheelScroll 1.8s cubic-bezier(0.65, 0.05, 0.36, 1) infinite;
+}
+
+/* Label */
+.mouse-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #2a2a2a;
+}
+
+/* Keyframes for wheel scrolling downward */
+@keyframes wheelScroll {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  65% {
+    opacity: 0.9;
+    transform: translateY(9px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+/* Gentle hint float (centered) */
+@keyframes hintFloat {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(5px);
+  }
+}
+
+/* Desktop layout: aligned with hero title at left: 10vw */
+@media (min-width: 1024px) {
+  .hero-scroll-hint {
+    left: 10vw;
+    transform: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    top: calc(100vh - 6rem);
+    top: calc(100dvh - 6rem);
+  }
+
+  .hero-scroll-hint.is-visible {
+    animation: hintFloatDesktop 2.4s ease-in-out infinite;
+  }
+
+  .hero-scroll-hint.is-hidden {
+    transform: translateY(12px);
+  }
+
+  @keyframes hintFloatDesktop {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(5px);
+    }
+  }
+}
+
+/* Mobile positioning (above mobile navbar with proper clearance) */
+@media (max-width: 639px) {
+  .hero-scroll-hint {
+    top: calc(100vh - 7.5rem);
+    top: calc(100dvh - 7.5rem);
+    gap: 0.3rem;
+  }
+
+  .mouse-indicator {
+    width: 20px;
+    height: 32px;
+  }
+
+  .mouse-wheel {
+    width: 3px;
+    height: 6px;
+    top: 5px;
+  }
+
+  .mouse-label {
+    font-size: 0.62rem;
+    letter-spacing: 1.2px;
+  }
+}
+
+/* Respect user's motion preferences */
+.hero-scroll-hint.reduce-motion,
+.hero-scroll-hint.reduce-motion .mouse-wheel {
+  animation: none !important;
+}
