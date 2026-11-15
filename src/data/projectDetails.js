@@ -34,8 +34,6 @@ import qr from '../assets/images/projects/pokedex/QR.png'
 
 import videoCubewar from '../assets/videos/cubewar.mp4'
 import videoSharkie from '../assets/videos/sharkie.mp4'
-import quiz from '../assets/videos/quiz.mp4'
-import menu from '../assets/videos/menu.mp4'
 
 import studentdashboard from '../assets/images/projects/gcode/studentdashboard.png'
 import admindashboard from '../assets/images/projects/gcode/admindshboard.png'
@@ -59,7 +57,12 @@ export const projectDetailsById = {
     { type: 'image', src: notification, alt: 'Real-time notifications', caption: 'Real-time notifications' },
   ],
   millennium: [
-    { type: 'video', src: quiz, caption: 'Taking a quiz', className: 'quiz-video' },
+    {
+      type: 'video',
+      src: 'https://res.cloudinary.com/cczrrt17/video/upload/v1794753474/quiz.mp4',
+      caption: 'Taking a quiz',
+      className: 'quiz-video',
+    },
     { type: 'image', src: content, alt: 'Content creation', caption: 'Content creation', fit: 'contain' },
     { type: 'image', src: admin, alt: 'Admin dashboard', caption: 'Admin dashboard', fit: 'contain' },
     { type: 'image', src: ai, alt: 'AI assistant', caption: 'AI assistant', fit: 'contain' },
@@ -88,8 +91,13 @@ export const projectDetailsById = {
     { type: 'image', src: sharkie4, alt: 'Admin analytics', caption: 'Admin analytics' },
   ],
   gebeta: [
-    { type: 'video', src: menu, caption: 'Menu exploration',fit:'contain' },
-    {type:'  image'  ,src: qr,caption:"QR image",fit:'contain'},
+    {
+      type: 'video',
+      src: 'https://res.cloudinary.com/cczrrt17/video/upload/v1794753512/menu.mp4',
+      caption: 'Menu exploration',
+      fit: 'contain',
+    },
+    { type: 'image', src: qr, caption: 'QR image', fit: 'contain' },
     { type: 'image', src: items, alt: 'Customer menu', caption: 'Customer menu' },
     { type: 'image', src: admindash, alt: 'Admin dashboard', caption: 'Admin dashboard' },
     { type: 'image', src: saveditems, alt: 'Saved items', caption: 'Saved items' },
