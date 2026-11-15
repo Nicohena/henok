@@ -52,9 +52,9 @@
            - script-src 'self': JS only from same origin (no inline, no eval)
            - style-src 'self' 'unsafe-inline': Tailwind 4 injects styles
              at runtime, needs 'unsafe-inline'
-           - img-src 'self' data: blob: : data URIs for SVGs, blob for
-             canvas textures and GLB binary blobs
-           - media-src 'self': music.mp3 and project videos
+           - img-src 'self' data: blob: https://res.cloudinary.com: data URIs for SVGs,
+             blob for canvas textures, Cloudinary for project images
+           - media-src 'self' https://res.cloudinary.com: local music.mp3 and Cloudinary project videos
            - font-src 'self': self-hosted woff2 (no Google Fonts)
            - connect-src 'self' blob:: no external API calls
            - object-src 'none': no Flash/Java/plugins
@@ -75,7 +75,7 @@
          so XSS surface is unchanged.
          ──────────────────────────────────────────────────────── -->
     <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self'; connect-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none';" />
+          content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com; media-src 'self' https://res.cloudinary.com; font-src 'self'; connect-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none';" />
 
     <!-- ───────────────────────────────────────────────────────────
          Preload critical-path assets so the browser starts fetching

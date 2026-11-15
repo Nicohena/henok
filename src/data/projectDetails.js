@@ -68,12 +68,16 @@ export const projectDetailsById = {
     { type: 'image', src: messages, alt: 'Messages', caption: 'Messages', fit: 'contain' },
   ],
   'gcode-lms': [
-    { type: 'video', src: videoSharkie, caption: 'Agricultural marketplace workflow', fit: 'contain' },
+    {
+      type: 'video',
+      src: 'https://res.cloudinary.com/cczrrt17/video/upload/v1794752102/lv_0_20261115152530_1.mp4',
+      caption: 'Content creation & discovery',
+      fit: 'contain',
+    },
     { type: 'image', src: studentdashboard, alt: 'Student dashboard', caption: 'Student dashboard', fit: 'contain', aspectRatio: '1897 / 937' },
     { type: 'image', src: admindashboard, alt: 'Admin dashboard', caption: 'Admin dashboard', fit: 'contain', aspectRatio: '1902 / 857' },
     { type: 'image', src: coursecreation, alt: 'Course creation', caption: 'Course creation', fit: 'contain', aspectRatio: '1906 / 857' },
     { type: 'image', src: gcodecertificate, alt: 'Certificate', caption: 'Certificate', fit: 'contain', aspectRatio: '1073 / 708' },
-    { type: 'image', src: sharkie4, alt: 'Admin analytics', caption: 'Admin analytics', fit: 'contain' },
   ],
   'green-harvest': [
     { type: 'video', src: videoSharkie, caption: 'Agricultural marketplace workflow' },
