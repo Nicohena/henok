@@ -4,6 +4,7 @@ import thumbnailGebeta from '../assets/images/projects/pokedex/thumbnail.webp'
 import thumbnailMillennium from '../assets/thumbnails/quibbo.webp'
 import thumbnailGreenHarvest from '../assets/thumbnails/sharkie.webp'
 import thumbnailSmartCampus from '../assets/thumbnails/campus.webp'
+import thumbnailGcode from '../assets/thumbnails/gcode.webp'
 
 export const projects = [
    {
@@ -17,6 +18,19 @@ export const projects = [
     theme: 'light',
     github: 'https://github.com/Engida-Platform/Nicohena-Engida.git',
     live: 'engida-virid.vercel.app',
+  },
+
+   {
+    id: 'gcode-lms',
+    title: 'gCODE LMS',
+    shortDesc: 'Learning Management System',
+    description:
+      'A learning platform for authoring, selling, and delivering structured courses. It combines a course studio, graded assessments, progress tracking, verified certificates, course-scoped discussions, analytics, and Chapa-powered payments in one modular monolith.',
+    thumbnail: thumbnailGcode,
+    tags: ['React', 'TypeScript', 'Node.js', 'MongoDB', 'WebSockets'],
+    theme: 'dark',
+    github: '',
+    live: '',
   },
    
    {

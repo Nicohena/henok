@@ -35,10 +35,10 @@ import qr from '../assets/images/projects/pokedex/QR.png'
 import videoCubewar from '../assets/videos/cubewar.mp4'
 import videoSharkie from '../assets/videos/sharkie.mp4'
 
-import studentdashboard from '../assets/images/projects/gcode/studentdashboard.png'
-import admindashboard from '../assets/images/projects/gcode/admindshboard.png'
-import coursecreation from '../assets/images/projects/gcode/coursecreation.png'
-import gcodecertificate from '../assets/images/projects/gcode/certificate.png'
+import studentdashboard from '../assets/images/projects/gcode/studentdashboard.webp'
+import admindashboard from '../assets/images/projects/gcode/admindshboard.webp'
+import coursecreation from '../assets/images/projects/gcode/coursecreation.webp'
+import gcodecertificate from '../assets/images/projects/gcode/certificate.webp'
 
 export const projectDetailsById = {
   'smart-campus': [
