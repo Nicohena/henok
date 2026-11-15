@@ -37,6 +37,10 @@ import videoSharkie from '../assets/videos/sharkie.mp4'
 import quiz from '../assets/videos/quiz.mp4'
 import menu from '../assets/videos/menu.mp4'
 
+import studentdashboard from '../assets/images/projects/gcode/studentdashboard.png'
+import admindashboard from '../assets/images/projects/gcode/admindshboard.png'
+import coursecreation from '../assets/images/projects/gcode/coursecreation.png'
+import gcodecertificate from '../assets/images/projects/gcode/certificate.png'
 
 export const projectDetailsById = {
   'smart-campus': [
@@ -62,6 +66,14 @@ export const projectDetailsById = {
     { type: 'image', src: certificate, alt: 'Certificates and achievements', caption: 'Certificates and achievements', fit: 'contain' },
     { type: 'image', src: discussion, alt: 'Discussion forums', caption: 'Discussion forums', fit: 'contain' },
     { type: 'image', src: messages, alt: 'Messages', caption: 'Messages', fit: 'contain' },
+  ],
+  'gcode-lms': [
+    { type: 'video', src: videoSharkie, caption: 'Agricultural marketplace workflow', fit: 'contain' },
+    { type: 'image', src: studentdashboard, alt: 'Student dashboard', caption: 'Student dashboard', fit: 'contain', aspectRatio: '1897 / 937' },
+    { type: 'image', src: admindashboard, alt: 'Admin dashboard', caption: 'Admin dashboard', fit: 'contain', aspectRatio: '1902 / 857' },
+    { type: 'image', src: coursecreation, alt: 'Course creation', caption: 'Course creation', fit: 'contain', aspectRatio: '1906 / 857' },
+    { type: 'image', src: gcodecertificate, alt: 'Certificate', caption: 'Certificate', fit: 'contain', aspectRatio: '1073 / 708' },
+    { type: 'image', src: sharkie4, alt: 'Admin analytics', caption: 'Admin analytics', fit: 'contain' },
   ],
   'green-harvest': [
     { type: 'video', src: videoSharkie, caption: 'Agricultural marketplace workflow' },
