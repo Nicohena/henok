@@ -12,7 +12,7 @@ export default function ContactSection() {
       ([entry]) => {
         setInView(entry.isIntersecting)
       },
-      { rootMargin: '200px' } // Load slightly before it comes into view
+      { rootMargin: '300px' }
     )
 
     if (sectionRef.current) observer.observe(sectionRef.current)
@@ -24,12 +24,14 @@ export default function ContactSection() {
 
       {/* Full-viewport 3D Canvas */}
       <div className="contact-canvas-wrapper">
-        {inView && (
-          <Canvas
-            camera={{ position: [0, 1.5, 6], fov: 45 }}
-            shadows
-            gl={{ alpha: true, antialias: true }}
-          >
+        <Canvas
+          frameloop={inView ? 'always' : 'never'}
+          camera={{ position: [0, 1.5, 6], fov: 45 }}
+          shadows
+          dpr={[1, 1.5]}
+          performance={{ min: 0.5 }}
+          gl={{ alpha: true, antialias: false, powerPreference: 'high-performance' }}
+        >
             <Suspense fallback={null}>
               <ambientLight intensity={1.5} />
               <directionalLight
@@ -51,7 +53,6 @@ export default function ContactSection() {
               </mesh>
             </Suspense>
           </Canvas>
-        )}
       </div>
 
       {/* Top-left text + social links */}
@@ -59,7 +60,7 @@ export default function ContactSection() {
         <h2>Let's work<br />together!</h2>
         <div className="contact-links">
           {/* Email — TODO: replace with your real email */}
-          <a href="mailto:henok.kebede@example.com" className="contact-icon-btn" aria-label="Email">
+          <a href="mailto:henokkebede410@gmail.com" className="contact-icon-btn" aria-label="Email">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
             </svg>
@@ -77,7 +78,7 @@ export default function ContactSection() {
             </svg>
           </a>
           {/* X / Twitter — TODO: replace with your real X handle */}
-          <a href="https://x.com/henokkebede" target="_blank" rel="noopener noreferrer" className="contact-icon-btn" aria-label="X (Twitter)">
+          <a href="https://x.com/NicoHena" target="_blank" rel="noopener noreferrer" className="contact-icon-btn" aria-label="X (Twitter)">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.631L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
             </svg>

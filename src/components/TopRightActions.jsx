@@ -1,69 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
+import { contactLoader } from '../utils/contactLoader';
 import './TopRightActions.css';
 
 export default function TopRightActions() {
   const [isMuted, setIsMuted] = useState(true);
   const audioRef = useRef(null);
-  const userPausedRef = useRef(false);
 
   const getAudio = () => {
     if (!audioRef.current) {
       audioRef.current = new Audio('/music.mp3');
       audioRef.current.loop = true;
       audioRef.current.volume = 0.15;
-      audioRef.current.muted = false;
-      // preload='none' — don't fetch the 2.3MB mp3 until the user
-      // actually interacts. Saves bandwidth for visitors who bounce.
       audioRef.current.preload = 'none';
     }
     return audioRef.current;
   };
 
   useEffect(() => {
-    const audio = getAudio();
-
-    const startMusic = () => {
-      if (userPausedRef.current || !audio.paused) return;
-      audio.muted = false;
-      audio.play().then(() => {
-        setIsMuted(false);
-      }).catch(() => {
-        // Autoplay blocked or fetch failed — stay muted, no error UI
-        setIsMuted(true);
-      });
-    };
-
-    // Single listener, fires once on the first user interaction of any
-    // kind, then removes itself. Previously this attached FOUR separate
-    // capture-mode listeners (pointerdown + click + keydown + touchstart)
-    // that all fired on every interaction — overkill and noisy.
-    //
-    // pointerdown covers mouse + touch + pen in one event. The { once: true }
-    // option auto-removes the listener after the first fire, so we don't
-    // need manual removeEventListener bookkeeping.
-    //
-    // We skip the sound button itself so clicking mute doesn't double-fire
-    // (the toggleSound handler manages play/pause on its own).
-    const handleFirstInteraction = (event) => {
-      if (event.target?.closest?.('.sound-btn')) return;
-      startMusic();
-    };
-
-    // Try once immediately (will fail silently if autoplay is blocked,
-    // which is the expected behavior on all modern browsers without
-    // prior user interaction — the listener below handles the real start).
-    startMusic();
-    window.addEventListener('pointerdown', handleFirstInteraction, {
-      capture: true,
-      passive: true,
-      once: true,
-    });
-
     return () => {
-      // { once: true } means the listener auto-removed itself if it fired,
-      // but if the component unmounts before any interaction we still
-      // need to clean up. removeEventListener is a no-op if already removed.
-      window.removeEventListener('pointerdown', handleFirstInteraction, true);
       if (audioRef.current) {
         audioRef.current.pause();
       }
@@ -72,6 +26,8 @@ export default function TopRightActions() {
 
   const handleGetInTouch = (e) => {
     e.stopPropagation();
+    // Trigger shared contact loading mechanism immediately
+    contactLoader.load();
     const contactSection = document.getElementById('contact');
     if (contactSection) {
       contactSection.scrollIntoView({ behavior: 'smooth' });
@@ -79,11 +35,10 @@ export default function TopRightActions() {
   };
 
   const toggleSound = (e) => {
-    e.stopPropagation(); // prevent global interaction handler from overriding toggle
+    e.stopPropagation();
     const audio = getAudio();
 
     if (audio.paused) {
-      userPausedRef.current = false;
       audio.muted = false;
       audio.play().then(() => {
         setIsMuted(false);
@@ -91,7 +46,6 @@ export default function TopRightActions() {
         setIsMuted(true);
       });
     } else {
-      userPausedRef.current = true;
       audio.pause();
       setIsMuted(true);
     }

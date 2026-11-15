@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { contactLoader } from '../utils/contactLoader'
+import { subscribeScroll } from '../hooks/useScrollProgress'
 import './Navbar.css'
 
 // Section definitions: id, label, and which color theme the section uses
@@ -13,39 +15,32 @@ export default function Navbar() {
   const [activeId, setActiveId] = useState('hero')
   const [theme, setTheme]       = useState('light')
 
-  // Detect active section via scroll position
+  // Detect active section via shared passive rAF scroll store
   useEffect(() => {
-    let rafId = null
-    const onScroll = () => {
-      if (rafId) return
-      rafId = requestAnimationFrame(() => {
-        rafId = null
-        const scrollMid = window.scrollY + window.innerHeight * 0.4
+    const unsubscribe = subscribeScroll((scrollY, height) => {
+      const scrollMid = scrollY + height * 0.4
 
-        let current = SECTIONS[0]
-        for (const section of SECTIONS) {
-          const el = document.getElementById(section.id)
-          if (el && el.offsetTop <= scrollMid) {
-            current = section
-          }
+      let current = SECTIONS[0]
+      for (const section of SECTIONS) {
+        const el = document.getElementById(section.id)
+        if (el && el.offsetTop <= scrollMid) {
+          current = section
         }
+      }
 
-        setActiveId(current.id)
-        setTheme(current.theme)
-      })
-    }
+      setActiveId(current.id)
+      setTheme(current.theme)
+    })
 
-    // Run once on mount
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      if (rafId) cancelAnimationFrame(rafId)
-    }
+    return unsubscribe
   }, [])
 
   const handleNav = (e, id) => {
     e.preventDefault()
+    if (id === 'contact') {
+      // Trigger shared loading mechanism immediately on click
+      contactLoader.load()
+    }
     const el = document.getElementById(id)
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }

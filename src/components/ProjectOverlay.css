@@ -50,8 +50,8 @@
 /* ─── Close button ──────────────────────────────────────────── */
 .project-close-btn {
   position: fixed;
-  top: 20px;
-  right: 24px;
+  top: max(16px, calc(env(safe-area-inset-top, 0px) + 12px));
+  right: max(16px, calc(env(safe-area-inset-right, 0px) + 12px));
   z-index: 1001;
   width: 42px;
   height: 42px;
@@ -66,6 +66,7 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: background 0.2s, transform 0.2s;
 }
 
@@ -76,8 +77,8 @@
 
 .project-back-btn {
   position: fixed;
-  top: 20px;
-  left: 24px;
+  top: max(16px, calc(env(safe-area-inset-top, 0px) + 12px));
+  left: max(16px, calc(env(safe-area-inset-left, 0px) + 12px));
   z-index: 1001;
   width: 42px;
   height: 42px;
@@ -92,6 +93,7 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: background 0.2s, transform 0.2s;
 }
 
@@ -120,7 +122,7 @@
 
 /* ─── Hero section ──────────────────────────────────────────── */
 .project-hero {
-  padding: 100px 6vw 48px;
+  padding: max(76px, calc(env(safe-area-inset-top, 0px) + 68px)) 5vw 36px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -265,14 +267,14 @@
 
 /* ─── Media content section ─────────────────────────────────── */
 .project-media-section {
-  padding: 24px 6vw 64px;
+  padding: 24px 4vw 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
   background: rgba(0, 0, 0, 0.03);
-  border-radius: 28px;
-  margin: 0 3vw;
+  border-radius: 20px;
+  margin: 0 2.5vw;
 }
 
 .theme-dark .project-media-section {
@@ -284,6 +286,7 @@
     padding: 64px 6vw;
     gap: 48px;
     margin: 0 4vw;
+    border-radius: 28px;
   }
 }
 
@@ -293,9 +296,15 @@
   width: 100%;
   max-width: 900px;
   aspect-ratio: 16 / 9;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
   background: #e8e4dc;
+}
+
+@media (min-width: 768px) {
+  .project-media-block {
+    border-radius: 16px;
+  }
 }
 
 .theme-dark .project-media-block {
@@ -315,14 +324,19 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  padding: 6px 16px;
+  padding: 5px 12px;
   background: rgba(245, 240, 232, 0.92);
-  border-radius: 12px 0 0 0;
-  font-size: 0.8rem;
+  border-radius: 10px 0 0 0;
+  font-size: clamp(0.7rem, 2.2vw, 0.8rem);
   font-weight: 700;
   color: #333;
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   font-family: var(--font-sans);
+  max-width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Quiz video crop fix */
@@ -378,16 +392,22 @@
 
 /* ─── Next project footer ──────────────────────────────────── */
 .project-next-wrapper {
-  padding: 40px 6vw 80px;
+  padding: 32px 5vw calc(env(safe-area-inset-bottom, 0px) + 50px);
   display: flex;
   justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .project-next-wrapper {
+    padding: 40px 6vw 80px;
+  }
 }
 
 .project-next-card {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 8px 20px 8px 8px;
+  gap: 14px;
+  padding: 8px 16px 8px 8px;
   border: 2px solid rgba(0, 0, 0, 0.08);
   border-radius: 14px;
   cursor: pointer;

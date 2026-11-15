@@ -11,6 +11,8 @@ import { useScrollProgress } from "../hooks/useScrollProgress";
 import "./MainScene.css";
 
 export default function MainScene({ onProgress, onLoaded }) {
+  const containerRef = useRef(null);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
   const aboutCardsRef = useRef(null);
   const lightfallRef = useRef(null);
   const lightRaysVisibleRef = useRef(false);
@@ -22,6 +24,19 @@ export default function MainScene({ onProgress, onLoaded }) {
   // when scroll crosses rAF thresholds, used to drive about-card opacity
   // and the LightRays mount/unmount toggle.
   const { progress } = useScrollProgress({ disabled: reduceMotion });
+
+  // Pause offscreen rendering when visitor scrolls past the hero/about section
+  useEffect(() => {
+    if (!containerRef.current) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroVisible(entry.isIntersecting)
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   // Apply scroll progress to DOM elements (about cards + lightfall bg).
   // Runs whenever `progress` changes — no internal scroll listener.
@@ -114,10 +129,10 @@ export default function MainScene({ onProgress, onLoaded }) {
       </div>
 
       {/* Sticky canvas — fixed height, sticks while scrolling hero+about */}
-      <div className="canvas-sticky-wrapper">
+      <div className="canvas-sticky-wrapper" ref={containerRef}>
         {/* LightRays background (fades in via scroll, behind 3D canvas) */}
         <div className="lightfall-bg" ref={lightfallRef}>
-          {showLightRays && !reduceMotion && (
+          {showLightRays && !reduceMotion && isHeroVisible && (
             <LightRays
               raysOrigin="top-center"
               raysColor="#00C8FF"
@@ -137,6 +152,7 @@ export default function MainScene({ onProgress, onLoaded }) {
         </div>
 
         <Canvas
+          frameloop={isHeroVisible ? "always" : "never"}
           camera={{ position: [0, 3.5, 6], fov: 42 }}
           shadows
           dpr={[0.9, 1.25]}
@@ -155,6 +171,7 @@ export default function MainScene({ onProgress, onLoaded }) {
               blur={2.5}
               resolution={256}
               far={10}
+              frames={1}
             />
 
             {/* Directional light shadow receiver floor */}

@@ -1,8 +1,31 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './LoadingScreen.css'
+import LoadingMascot from './LoadingMascot'
+import ErrorBoundary from './ErrorBoundary'
+import { useReducedMotion } from '../hooks/useReducedMotion'
 
+/**
+ * Loading screen — mirrors the "Samuel Briskar / ThreeDee" loading shot:
+ * white backdrop, 3D seal scene up top, blue "Loading..." wordmark with
+ * sequential dots, glowing pill progress bar. At 100% the scene cuts to
+ * the party emoji and the bar turns green ("Loaded").
+ */
 export default function LoadingScreen({ progress, isVisible }) {
+  const [mounted, setMounted] = useState(true)
   const barRef = useRef(null)
+  const reduced = useReducedMotion()
+  const celebrate = progress >= 100
+
+  // Unmount after the 0.8s CSS fade transition completes so the LoadingMascot
+  // WebGL context and requestAnimationFrame loop are completely freed from GPU memory.
+  useEffect(() => {
+    if (!isVisible) {
+      const timer = setTimeout(() => {
+        setMounted(false)
+      }, 850)
+      return () => clearTimeout(timer)
+    }
+  }, [isVisible])
 
   useEffect(() => {
     if (barRef.current) {
@@ -10,45 +33,38 @@ export default function LoadingScreen({ progress, isVisible }) {
     }
   }, [progress])
 
+  if (!mounted) return null
+
   return (
     <div className={`loading-screen ${!isVisible ? 'loading-screen--hidden' : ''}`}>
-      {/* Animated background grid */}
-      <div className="loading-grid" aria-hidden="true" />
-
-      {/* Center content */}
       <div className="loading-content">
-        {/* Name / Brand */}
-        <div className="loading-brand">
-          <span className="loading-brand-first">HENOK</span>
-          <span className="loading-brand-last">KEBEDE</span>
+        {/* 3D scene — isolated so a WebGL failure can never break the screen */}
+        <ErrorBoundary fallback={null}>
+          <LoadingMascot celebrate={celebrate} reduced={reduced} visible={isVisible} />
+        </ErrorBoundary>
+
+        {/* Wordmark with sequential dots, as in the reference */}
+        <div className="loading-text" aria-live="polite">
+          {celebrate ? 'Loaded' : 'Loading'}
+          {!celebrate && (
+            <span className="loading-dots-anim" aria-hidden="true">
+              <span>.</span>
+              <span>.</span>
+              <span>.</span>
+            </span>
+          )}
         </div>
 
-        <p className="loading-subtitle">PORTFOLIO</p>
-
-        {/* Progress bar */}
+        {/* Glowing pill progress bar */}
         <div className="loading-bar-track">
-          <div className="loading-bar-fill" ref={barRef} />
+          <div
+            className={`loading-bar-fill ${celebrate ? 'loading-bar-fill--loaded' : ''}`}
+            ref={barRef}
+          />
         </div>
 
-        {/* Progress text */}
-        <div className="loading-meta">
-          <span className="loading-percent">{Math.round(progress)}%</span>
-          <span className="loading-label">Loading assets</span>
-        </div>
-
-        {/* Pulse dots */}
-        <div className="loading-dots" aria-hidden="true">
-          {[0, 1, 2].map((i) => (
-            <span key={i} className="loading-dot" style={{ animationDelay: `${i * 0.2}s` }} />
-          ))}
-        </div>
+        <p className="loading-caption">Henok Kebede · Portfolio</p>
       </div>
-
-      {/* Corner decorations */}
-      <span className="loading-corner loading-corner--tl" aria-hidden="true" />
-      <span className="loading-corner loading-corner--tr" aria-hidden="true" />
-      <span className="loading-corner loading-corner--bl" aria-hidden="true" />
-      <span className="loading-corner loading-corner--br" aria-hidden="true" />
     </div>
   )
 }

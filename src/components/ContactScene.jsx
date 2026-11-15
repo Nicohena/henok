@@ -1,10 +1,20 @@
 import { useEffect, useRef } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
+import { useThree } from '@react-three/fiber'
 
 export default function ContactScene() {
   const wavingRef = useRef()
-  const waving = useGLTF('/waving.glb')
+  const waving = useGLTF('/waving_opt.glb')
   const contact = useGLTF('/contact.glb')
+
+  const { viewport } = useThree()
+  const isNarrow = viewport.width < 5
+  const isMobile = viewport.width < 3
+
+  const boxesPos = isMobile ? [0.95, -1.5, -0.8] : (isNarrow ? [1.8, -1.5, -0.6] : [3.5, -1.5, -0.5])
+  const boxesScale = isMobile ? 1.3 : (isNarrow ? 1.6 : 2)
+  const charPos = isMobile ? [0, -1.6, 0] : [0, -1.5, 0]
+  const charScale = isMobile ? 1.75 : 2
 
   const { actions } = useAnimations(waving.animations, wavingRef)
 
@@ -61,27 +71,22 @@ export default function ContactScene() {
 
   return (
     <group>
-      {/* Waving character — centered in canvas, facing camera.
-          No Y-rotation needed — the Boy01 model faces -Z (toward camera)
-          by default after removing the erroneous +PI offset. */}
+      {/* Waving character — centered in canvas, facing camera */}
       <primitive
         ref={wavingRef}
         object={waving.scene}
-        position={[0, -1.5, 0]}
-        scale={2}
+        position={charPos}
+        scale={charScale}
         rotation={[0, 0, 0]}
       />
 
       {/* Contact environment (boxes / envelopes) — to the right and slightly back */}
       <primitive
         object={contact.scene}
-        position={[3.5, -1.5, -0.5]}
-        scale={2}
+        position={boxesPos}
+        scale={boxesScale}
         rotation={[0, -Math.PI / 5, 0]}
       />
     </group>
   )
 }
-
-useGLTF.preload('/waving.glb')
-useGLTF.preload('/contact.glb')

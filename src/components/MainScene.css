@@ -46,7 +46,7 @@
 .hero-badge {
   background-color: #38257a; /* Deep purple matching reference */
   color: #ffffff;
-  font-family: var(--font-mono)
+  font-family: var(--font-mono);
   font-size: clamp(1rem, 2vw, 1.8rem);
   font-weight: 700;
   padding: 0.5rem 1.5rem;
@@ -122,3 +122,155 @@
 .skills-card ul { list-style: none; padding: 0; margin: 0; }
 .skills-card ul li { font-size: 1.1rem; color: #fff; padding: 0.2rem 0; }
 .skills-card ul li::before { content: '• '; color: #00c8ff; }
+
+/* ─── Tablet / iPad (640px to 1023px) ───────────────────────── */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .hero-text-overlay {
+    top: 11vh;
+    left: 4vw;
+  }
+  .hero-name-line {
+    font-size: clamp(2.8rem, 6.5vw, 4.4rem);
+  }
+  .hero-badge {
+    margin-left: 10%;
+    font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+    padding: 0.45rem 1.25rem;
+  }
+
+  .name-card {
+    top: 14%;
+    left: 4%;
+  }
+  .name-card figure {
+    width: 190px !important;
+    height: 95px !important;
+  }
+  .name-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
+  }
+  .name-card p {
+    font-size: 0.95rem;
+  }
+
+  .skills-card {
+    top: 18%;
+    right: 4%;
+    min-width: unset;
+  }
+  .skills-card figure {
+    width: 215px !important;
+    height: 220px !important;
+  }
+  .skills-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.4rem;
+  }
+  .skills-card ul li {
+    font-size: 0.92rem;
+    padding: 0.15rem 0;
+  }
+
+  .bio-card {
+    top: 50%;
+    left: 4%;
+    max-width: 270px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .bio-card figure {
+    width: 270px !important;
+    height: 150px !important;
+  }
+}
+
+/* ─── Mobile (< 640px) ──────────────────────────────────────── */
+@media (max-width: 639px) {
+  .hero-text-overlay {
+    top: max(3.5rem, calc(env(safe-area-inset-top, 0px) + 1.75rem));
+    left: 1.25rem;
+    right: 1.25rem;
+    width: auto;
+    max-width: calc(100vw - 2.5rem);
+    align-items: flex-start;
+  }
+  .hero-name-line {
+    font-size: clamp(2.3rem, 10vw, 3.4rem);
+    letter-spacing: 1px;
+  }
+  .hero-badge {
+    margin-left: 0;
+    margin-top: 0.35rem;
+    font-size: clamp(0.78rem, 3.5vw, 0.95rem);
+    padding: 0.4rem 1.1rem;
+    transform: rotate(-3deg);
+  }
+
+  .name-card {
+    top: max(4.2rem, calc(env(safe-area-inset-top, 0px) + 3.5rem));
+    left: 0.75rem;
+  }
+  .name-card figure {
+    width: 125px !important;
+    height: 60px !important;
+  }
+  .name-card .glass-panel {
+    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
+  }
+  .name-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.1rem;
+  }
+  .name-card p {
+    font-size: 0.75rem;
+  }
+
+  .skills-card {
+    /* Placed on the right below the cap/head level so it does not collide with the character */
+    top: 32%;
+    right: 0.5rem;
+    left: auto;
+    min-width: unset;
+  }
+  .skills-card figure {
+    width: 122px !important;
+    height: 136px !important;
+  }
+  .skills-card .glass-panel {
+    padding: 0.45rem 0.65rem;
+    border-radius: 10px;
+  }
+  .skills-card h4 {
+    font-size: 0.82rem;
+    margin-bottom: 0.2rem;
+  }
+  .skills-card ul li {
+    font-size: 0.65rem;
+    padding: 0.05rem 0;
+  }
+
+  .bio-card {
+    top: auto;
+    bottom: max(5%, calc(env(safe-area-inset-bottom, 0px) + 4.2rem));
+    left: 0.75rem;
+    right: 0.75rem;
+    margin: 0 auto;
+    max-width: 380px;
+  }
+  .bio-card figure {
+    width: 100% !important;
+    max-width: 380px !important;
+    height: auto !important;
+    min-height: 75px !important;
+  }
+  .bio-card .glass-panel {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+  }
+  .bio-card p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+}

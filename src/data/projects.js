@@ -7,6 +7,19 @@ import thumbnailSmartCampus from '../assets/thumbnails/campus.webp'
 
 export const projects = [
    {
+    id: 'engida',
+    title: 'Engida',
+    shortDesc: 'Property rental and selling online marketplace',
+    description:
+      'ENGIDA connects property seekers with property vendors, facilitating transparent and efficient real estate transactions in Ethiopia. The platform leverages modern web technologies and AI-powered intelligence to provide personalized recommendations, accurate price predictions, and a seamless user experience.',
+    thumbnail: thumbnailGojo,
+    tags: ['Next.js', 'Nest.js', 'PostgreSQL','FastAPI',  'Chapa', 'Cloudinary'],
+    theme: 'light',
+    github: 'https://github.com/Engida-Platform/Nicohena-Engida.git',
+    live: 'engida-virid.vercel.app',
+  },
+   
+   {
     id: 'gojo',
     title: 'Gojo',
     shortDesc: 'Property rental marketplace',

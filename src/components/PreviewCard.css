@@ -123,6 +123,22 @@
   transform: rotate(-45deg);
 }
 
+/* Touch devices: keep button visible for clear interaction affordance */
+@media (hover: none) {
+  .preview-card-overlay {
+    opacity: 1;
+  }
+  .preview-card-arrow-btn {
+    opacity: 0.92;
+    transform: rotate(-45deg);
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    bottom: 8px;
+    right: 8px;
+  }
+}
+
 /* ─── Text content ─────────────────────────────────────────── */
 .preview-card-content {
   padding: 10px 4px 4px;

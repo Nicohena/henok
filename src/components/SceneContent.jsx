@@ -13,14 +13,15 @@ export default function SceneContent({ reduceMotion = false }) {
   const fadeMaterialsRef = useRef([])
   const frameCount   = useRef(0)
   const prevT        = useRef(-1)
+  const targetVec    = useRef(new THREE.Vector3())
 
   // Single shared scroll listener — exposes a ref we can read inside
   // useFrame without triggering re-renders. disabled when reduceMotion.
   const { progressRef } = useScrollProgress({ disabled: reduceMotion })
 
-  const typing  = useGLTF('/typing.glb')
-  const talking = useGLTF('/sitting_and_talking.glb')
-  const chair   = useGLTF('/chair.glb')
+  const typing  = useGLTF('/typing_opt.glb')
+  const talking = useGLTF('/sitting_anim.glb')
+  const chair   = useGLTF('/chair_opt.glb')
 
   const { actions: typingActions, mixer } = useAnimations(typing.animations, charRef)
   const talkingActionRef = useRef(null)
@@ -100,8 +101,40 @@ export default function SceneContent({ reduceMotion = false }) {
   // re-traverses the scene graph — on every render.
   }, [mixer, typingActions, talking])
 
-  useFrame(() => {
+  useFrame(({ camera, viewport }) => {
     if (!charRef.current) return
+
+    const t = reduceMotion ? 0 : progressRef.current
+    frameCount.current++
+
+    // Responsive camera framing for narrow viewports (mobile and iPad portrait)
+    // Centers and frames the character + desk + monitor in Hero, then smoothly
+    // lerps to the About center framing [0, 3.5, 6] looking at [0, 0, 0].
+    if (viewport.aspect < 1.05) {
+      const isMobile = viewport.aspect < 0.7
+      const heroCamX = isMobile ? 1.6 : 0.6
+      const heroCamY = isMobile ? 2.8 : 3.2
+      const heroCamZ = isMobile ? 9.4 : 7.8
+      const heroTargetX = isMobile ? 2.2 : 1.9
+      const heroTargetY = isMobile ? -0.6 : -0.4
+      const heroTargetZ = 0.2
+
+      const curCamX = THREE.MathUtils.lerp(heroCamX, 0, t)
+      const curCamY = THREE.MathUtils.lerp(heroCamY, 3.5, t)
+      const curCamZ = THREE.MathUtils.lerp(heroCamZ, 6.0, t)
+
+      const curTargetX = THREE.MathUtils.lerp(heroTargetX, 0, t)
+      const curTargetY = THREE.MathUtils.lerp(heroTargetY, 0, t)
+      const curTargetZ = THREE.MathUtils.lerp(heroTargetZ, 0, t)
+
+      camera.position.set(curCamX, curCamY, curCamZ)
+      targetVec.current.set(curTargetX, curTargetY, curTargetZ)
+      camera.lookAt(targetVec.current)
+    } else {
+      camera.position.set(0, 3.5, 6)
+      targetVec.current.set(0, 0, 0)
+      camera.lookAt(targetVec.current)
+    }
 
     // Reduced motion: freeze character in hero pose, keep desk visible,
     // disable all scroll-driven choreography. Typing animation still plays
@@ -119,9 +152,6 @@ export default function SceneContent({ reduceMotion = false }) {
       }
       return
     }
-
-    const t = progressRef.current
-    frameCount.current++
 
     // Always lerp position/scale/rotation (cheap, must be smooth)
     charRef.current.position.x = THREE.MathUtils.lerp(heroX, aboutX, t)
@@ -195,6 +225,6 @@ export default function SceneContent({ reduceMotion = false }) {
   )
 }
 
-useGLTF.preload('/typing.glb')
-useGLTF.preload('/sitting_and_talking.glb')
-useGLTF.preload('/chair.glb')
+useGLTF.preload('/typing_opt.glb')
+useGLTF.preload('/sitting_anim.glb')
+useGLTF.preload('/chair_opt.glb')

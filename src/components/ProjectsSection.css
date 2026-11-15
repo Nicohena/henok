@@ -4,16 +4,24 @@
   width: 100%;
   min-height: 100vh;
   background: #f5f0e8;
-  padding: 96px 6vw;
+  padding: 80px 5vw calc(5.5rem + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 48px;
+  gap: 36px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .projects-section {
-    padding: 120px 6vw;
+    padding: 96px 6vw 80px;
+    gap: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .projects-section {
+    padding: 120px 6vw 96px;
+    gap: 48px;
   }
 }
 

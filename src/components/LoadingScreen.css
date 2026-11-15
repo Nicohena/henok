@@ -1,8 +1,10 @@
+/* Loading screen — light theme mirroring the ThreeDee "Loading" shot */
+
 .loading-screen {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: #0a0a0f;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,151 +19,114 @@
   pointer-events: none;
 }
 
-/* Subtle grid background */
-.loading-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0, 200, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 200, 255, 0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: grid-pan 12s linear infinite;
-}
-
-@keyframes grid-pan {
-  from { background-position: 0 0; }
-  to   { background-position: 60px 60px; }
-}
-
-/* Center content */
+/* Center column */
 .loading-content {
-  position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.2rem;
+  gap: 0.9rem;
 }
 
-/* Brand name */
-.loading-brand {
-  display: flex;
-  gap: 1rem;
-  font-family: var(--font-mono);
-  font-size: clamp(2.4rem, 6vw, 5rem);
-  font-weight: 700;
-  letter-spacing: 6px;
-  line-height: 1;
-  -webkit-font-smoothing: none;
-  font-smooth: never;
+/* 3D scene canvas */
+.loading-mascot {
+  width: clamp(320px, 46vw, 520px);
+  height: clamp(210px, 30vh, 290px);
+  margin-bottom: -0.5rem;
+  pointer-events: none;
 }
 
-.loading-brand-first {
-  color: #ffffff;
-  animation: brand-flicker 4s ease-in-out infinite;
+.loading-mascot canvas {
+  display: block;
 }
 
-.loading-brand-last {
-  color: #ff8a00;
-  animation: brand-flicker 4s ease-in-out 0.4s infinite;
-}
-
-@keyframes brand-flicker {
-  0%, 92%, 100% { opacity: 1; }
-  94%            { opacity: 0.7; }
-  96%            { opacity: 1; }
-  98%            { opacity: 0.85; }
-}
-
-/* Subtitle */
-.loading-subtitle {
+/* "Loading" / "Loaded" wordmark — deep navy, as in the reference */
+.loading-text {
   font-family: var(--font-sans);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 8px;
-  color: rgba(255, 255, 255, 0.3);
-  text-transform: uppercase;
-  margin-top: -0.6rem;
+  font-weight: 800;
+  font-size: clamp(1.25rem, 3.2vw, 1.9rem);
+  color: #232a5e;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: baseline;
 }
 
-/* Progress bar */
+/* Sequential dots: ".", "..", "..." */
+.loading-dots-anim {
+  display: inline-flex;
+  margin-left: 1px;
+}
+
+.loading-dots-anim span {
+  opacity: 0;
+  animation: dot-in 1.05s infinite;
+}
+
+.loading-dots-anim span:nth-child(2) {
+  animation-delay: 0.14s;
+}
+
+.loading-dots-anim span:nth-child(3) {
+  animation-delay: 0.28s;
+}
+
+@keyframes dot-in {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  70%  { opacity: 1; }
+  85%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Pill progress bar — white track with a soft shadow, blue gradient fill */
 .loading-bar-track {
-  width: clamp(240px, 40vw, 420px);
-  height: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 99px;
+  width: clamp(240px, 38vw, 400px);
+  height: 13px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px rgba(190, 200, 225, 0.55),
+    0 6px 16px rgba(60, 80, 150, 0.12);
   overflow: hidden;
-  margin-top: 0.4rem;
 }
 
 .loading-bar-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #5227ff, #00c8ff, #ff8a00);
-  background-size: 200% 100%;
-  border-radius: 99px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2f6bf0, #8fb3fa);
+  box-shadow:
+    0 0 8px rgba(47, 107, 240, 0.35),
+    0 2px 6px rgba(47, 107, 240, 0.25);
   transition: width 0.3s ease;
-  animation: bar-shimmer 2s linear infinite;
 }
 
-@keyframes bar-shimmer {
-  0%   { background-position: 0% 0; }
-  100% { background-position: 200% 0; }
+/* Loaded beat — green bar with glow */
+.loading-bar-fill--loaded {
+  background: linear-gradient(90deg, #2ed573, #4ce07e);
+  box-shadow:
+    0 0 8px rgba(53, 224, 106, 0.45),
+    0 2px 6px rgba(53, 224, 106, 0.3);
 }
 
-/* Meta row */
-.loading-meta {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
+/* Subtle brand caption */
+.loading-caption {
+  margin: 0.55rem 0 0;
   font-family: var(--font-sans);
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.35);
-  letter-spacing: 1px;
-}
-
-.loading-percent {
-  font-weight: 700;
-  color: #00c8ff;
-  font-variant-numeric: tabular-nums;
-  min-width: 3ch;
-  text-align: right;
-}
-
-.loading-label {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 3.5px;
   text-transform: uppercase;
+  color: #a7abbb;
 }
 
-/* Pulse dots */
-.loading-dots {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.4rem;
-}
+@media (max-width: 480px) {
+  .loading-mascot {
+    width: clamp(250px, 80vw, 340px);
+    height: clamp(165px, 25vh, 220px);
+    margin-bottom: -0.3rem;
+  }
 
-.loading-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #5227ff;
-  animation: dot-pulse 1.2s ease-in-out infinite;
+  .loading-bar-track {
+    width: clamp(200px, 74vw, 300px);
+  }
 }
-
-@keyframes dot-pulse {
-  0%, 100% { transform: scale(0.6); opacity: 0.3; }
-  50%       { transform: scale(1.4); opacity: 1; background: #00c8ff; }
-}
-
-/* Corner bracket decorations */
-.loading-corner {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  border-color: rgba(0, 200, 255, 0.3);
-  border-style: solid;
-}
-
-.loading-corner--tl { top: 2rem; left: 2rem; border-width: 1px 0 0 1px; }
-.loading-corner--tr { top: 2rem; right: 2rem; border-width: 1px 1px 0 0; }
-.loading-corner--bl { bottom: 2rem; left: 2rem; border-width: 0 0 1px 1px; }
-.loading-corner--br { bottom: 2rem; right: 2rem; border-width: 0 1px 1px 0; }
