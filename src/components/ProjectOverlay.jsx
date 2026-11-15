@@ -17,27 +17,31 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
     onSelectProject(nextProject)
   }, [nextProject, onSelectProject])
 
-  // Lock page scroll & listen for Escape key
+  // Lock page scroll, hide navbar & listen for Escape key
   useEffect(() => {
     const prevBodyOverflow = document.body.style.overflow
     const prevHtmlOverflow = document.documentElement.style.overflow
     document.body.style.overflow = 'hidden'
     document.documentElement.style.overflow = 'hidden'
+    document.body.classList.add('project-overlay-open')
 
     const onKey = (e) => {
       if (e.key === 'Escape') onClose()
     }
     document.addEventListener('keydown', onKey)
 
-    // Scroll overlay to top on open
-    if (overlayRef.current) overlayRef.current.scrollTo(0, 0)
-
     return () => {
       document.body.style.overflow = prevBodyOverflow
       document.documentElement.style.overflow = prevHtmlOverflow
+      document.body.classList.remove('project-overlay-open')
       document.removeEventListener('keydown', onKey)
     }
-  }, [onClose, project.id])
+  }, [onClose])
+
+  // Scroll overlay to top on open / project change
+  useEffect(() => {
+    if (overlayRef.current) overlayRef.current.scrollTo(0, 0)
+  }, [project.id])
 
   const themeClass = project.theme === 'dark' ? 'theme-dark' : ''
 

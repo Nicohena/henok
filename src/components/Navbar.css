@@ -9,6 +9,23 @@
   white-space: nowrap;
 }
 
+/* Hide navbar completely when project details overlay is active */
+body.project-overlay-open .navbar {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-20px);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 639px) {
+  body.project-overlay-open .navbar {
+    transform: translateX(-50%) translateY(20px);
+  }
+}
+
 /* The pill container */
 .navbar-pill {
   display: flex;
