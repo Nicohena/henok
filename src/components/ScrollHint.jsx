@@ -47,7 +47,6 @@ export default function ScrollHint({ isHeroLoaded }) {
       <div className="mouse-indicator">
         <span className="mouse-wheel" />
       </div>
-      <span className="mouse-label">Scroll to explore</span>
     </div>
   )
 }
