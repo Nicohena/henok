@@ -136,7 +136,10 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
                       playsInline
                       preload="metadata"
                       className={comp.className || ''}
-                      style={comp.fit ? { objectFit: comp.fit } : undefined}
+                      style={{
+                        ...(comp.fit ? { objectFit: comp.fit } : {}),
+                        ...(comp.objectPosition ? { objectPosition: comp.objectPosition } : {}),
+                      }}
                     />
                   ) : (
                     <img
@@ -144,7 +147,10 @@ export default function ProjectOverlay({ project, onClose, onSelectProject }) {
                       alt={comp.alt || ''}
                       loading="lazy"
                       decoding="async"
-                      style={comp.fit ? { objectFit: comp.fit } : undefined}
+                      style={{
+                        ...(comp.fit ? { objectFit: comp.fit } : {}),
+                        ...(comp.objectPosition ? { objectPosition: comp.objectPosition } : {}),
+                      }}
                     />
                   )}
                   {comp.caption && (

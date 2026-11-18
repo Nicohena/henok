@@ -46,7 +46,9 @@ export const projectDetailsById = {
       type: 'video',
       src: 'https://res.cloudinary.com/dszqyplnn/video/upload/v1794987753/Engida_vid.mp4',
       caption: 'Platform overview & property marketplace workflow',
-      fit: 'contain',
+      fit: 'cover',
+      objectPosition: 'top',
+      aspectRatio: '1920 / 950',
     },
   ],
   'smart-campus': [
