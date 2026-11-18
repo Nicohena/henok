@@ -41,6 +41,14 @@ import coursecreation from '../assets/images/projects/gcode/coursecreation.webp'
 import gcodecertificate from '../assets/images/projects/gcode/certificate.webp'
 
 export const projectDetailsById = {
+  engida: [
+    {
+      type: 'video',
+      src: 'https://res.cloudinary.com/dszqyplnn/video/upload/v1794987753/Engida_vid.mp4',
+      caption: 'Platform overview & property marketplace workflow',
+      fit: 'contain',
+    },
+  ],
   'smart-campus': [
     { type: 'image', src: hero, alt: 'Hero section', caption: 'Hero section' },
     { type: 'image', src: Authentication, alt: 'Authentication', caption: 'Authentication' },
