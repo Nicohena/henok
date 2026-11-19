@@ -1,8 +1,8 @@
 
 import thumbnailEngida from '../assets/thumbnails/engida.webp'
-import thumbnailGojo from '../assets/images/projects/cubewar/thumbnel_for_gojo.webp'
+import thumbnailGojo from '../assets/thumbnails/gojo.webp'
 import thumbnailGebeta from '../assets/images/projects/pokedex/thumbnail.webp'
-import thumbnailMillennium from '../assets/thumbnails/quibbo.webp'
+import thumbnailMillennium from '../assets/thumbnails/millennium.webp'
 import thumbnailGreenHarvest from '../assets/thumbnails/sharkie.webp'
 import thumbnailSmartCampus from '../assets/thumbnails/campus.webp'
 import thumbnailGcode from '../assets/thumbnails/gcode.webp'
