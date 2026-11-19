@@ -14,7 +14,12 @@ const ContactSection  = lazy(() => import("./components/ContactSection"));
 
 function LazyWhenNear({ children, rootMargin = "600px 0px" }) {
   const ref = useRef(null);
-  const [shouldRender, setShouldRender] = useState(false);
+  const [shouldRender, setShouldRender] = useState(() => {
+    if (typeof window !== "undefined" && window.location.search.includes("project=")) {
+      return true;
+    }
+    return false;
+  });
 
   useEffect(() => {
     if (shouldRender || !ref.current) return;

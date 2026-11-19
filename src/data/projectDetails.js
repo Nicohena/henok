@@ -1,3 +1,6 @@
+import engidaHome from '../assets/images/projects/engida/homepage.webp'
+import engidaAdmin from '../assets/images/projects/engida/admindashboard.webp'
+
 import Admin from '../assets/images/projects/streakon/Admin.webp'
 import Authentication from '../assets/images/projects/streakon/Authentication.webp'
 import hero from '../assets/images/projects/streakon/hero.webp'
@@ -49,6 +52,22 @@ export const projectDetailsById = {
       fit: 'cover',
       objectPosition: 'top',
       aspectRatio: '1920 / 950',
+    },
+    {
+      type: 'image',
+      src: engidaHome,
+      alt: 'Engida homepage & property discovery',
+      caption: 'Homepage & property discovery',
+      fit: 'contain',
+      aspectRatio: '1901 / 904',
+    },
+    {
+      type: 'image',
+      src: engidaAdmin,
+      alt: 'Engida admin dashboard',
+      caption: 'Admin dashboard & management',
+      fit: 'contain',
+      aspectRatio: '1889 / 940',
     },
   ],
   'smart-campus': [
