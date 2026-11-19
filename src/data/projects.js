@@ -1,4 +1,5 @@
 
+import thumbnailEngida from '../assets/thumbnails/engida.webp'
 import thumbnailGojo from '../assets/images/projects/cubewar/thumbnel_for_gojo.webp'
 import thumbnailGebeta from '../assets/images/projects/pokedex/thumbnail.webp'
 import thumbnailMillennium from '../assets/thumbnails/quibbo.webp'
@@ -13,7 +14,7 @@ export const projects = [
     shortDesc: 'Property rental and selling online marketplace',
     description:
       'ENGIDA connects property seekers with property vendors, facilitating transparent and efficient real estate transactions in Ethiopia. The platform leverages modern web technologies and AI-powered intelligence to provide personalized recommendations, accurate price predictions, and a seamless user experience.',
-    thumbnail: thumbnailGojo,
+    thumbnail: thumbnailEngida,
     tags: ['Next.js', 'Nest.js', 'PostgreSQL','FastAPI',  'Chapa', 'Cloudinary'],
     theme: 'light',
     github: 'https://github.com/Engida-Platform/Nicohena-Engida.git',
