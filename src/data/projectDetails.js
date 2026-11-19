@@ -23,11 +23,8 @@ import discussion from '../assets/images/projects/quibbo/disussion.webp'
 import messages from '../assets/images/projects/quibbo/messages.webp'
 
 
-import sharkie0 from '../assets/images/projects/sharkie/sharkie-0.webp'
-import sharkie1 from '../assets/images/projects/sharkie/sharkie-1.webp'
-import sharkie2 from '../assets/images/projects/sharkie/sharkie-2.webp'
-import sharkie3 from '../assets/images/projects/sharkie/sharkie-3.webp'
-import sharkie4 from '../assets/images/projects/sharkie/sharkie-4.webp'
+import sellerDashboard from '../assets/images/projects/sharkie/seller_dashboard.webp'
+import storeDecoration from '../assets/images/projects/sharkie/store_decoration.webp'
 
 import admindash from '../assets/images/projects/pokedex/admindash.webp'
 import saveditems from '../assets/images/projects/pokedex/saveditems.webp'
@@ -36,7 +33,6 @@ import itemdetail from '../assets/images/projects/pokedex/itemdetail.webp'
 import qr from '../assets/images/projects/pokedex/QR.png'
 
 import videoCubewar from '../assets/videos/cubewar.mp4'
-import videoSharkie from '../assets/videos/sharkie.mp4'
 
 import studentdashboard from '../assets/images/projects/gcode/studentdashboard.webp'
 import admindashboard from '../assets/images/projects/gcode/admindshboard.webp'
@@ -112,12 +108,22 @@ export const projectDetailsById = {
     { type: 'image', src: gcodecertificate, alt: 'Certificate', caption: 'Certificate', fit: 'contain', aspectRatio: '1073 / 708' },
   ],
   'green-harvest': [
-    { type: 'video', src: videoSharkie, caption: 'Agricultural marketplace workflow' },
-    { type: 'image', src: sharkie0, alt: 'Marketplace catalog', caption: 'Marketplace catalog' },
-    { type: 'image', src: sharkie1, alt: 'Farmer product management', caption: 'Farmer product management' },
-    { type: 'image', src: sharkie2, alt: 'Order tracking', caption: 'Order tracking' },
-    { type: 'image', src: sharkie3, alt: 'Delivery proof workflow', caption: 'Delivery proof workflow' },
-    { type: 'image', src: sharkie4, alt: 'Admin analytics', caption: 'Admin analytics' },
+    {
+      type: 'image',
+      src: sellerDashboard,
+      alt: 'Seller Center & business performance dashboard',
+      caption: 'Seller Center & business performance dashboard',
+      fit: 'contain',
+      aspectRatio: '1919 / 938',
+    },
+    {
+      type: 'image',
+      src: storeDecoration,
+      alt: 'AgriWorkbench store decoration & visual builder',
+      caption: 'AgriWorkbench store decoration & visual builder',
+      fit: 'contain',
+      aspectRatio: '1918 / 941',
+    },
   ],
   gebeta: [
     {
