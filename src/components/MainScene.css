@@ -123,6 +123,53 @@
 .skills-card ul li { font-size: 1.1rem; color: #fff; padding: 0.2rem 0; }
 .skills-card ul li::before { content: '• '; color: #00c8ff; }
 
+/* CV download button — centered at the bottom of the about section */
+.cv-download-about {
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff8a00, #ff6b2b);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 18px rgba(255, 107, 43, 0.4);
+  pointer-events: auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cv-download-about svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.cv-download-about:hover {
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 6px 24px rgba(255, 107, 43, 0.55);
+}
+
+/* bio-cv-stack: transparent on desktop — children use their own absolute positions */
+.bio-cv-stack {
+  position: contents; /* children participate in .about-cards layout as normal */
+}
+
+/* Bio card glass panel always auto-sizes to content */
+.bio-card .glass-panel {
+  height: auto;
+  overflow: visible;
+}
+
 /* ─── Tablet / iPad (640px to 1023px) ───────────────────────── */
 @media (min-width: 640px) and (max-width: 1023px) {
   .hero-text-overlay {
@@ -183,6 +230,16 @@
     width: 270px !important;
     height: 150px !important;
   }
+
+  .cv-download-about {
+    bottom: 5%;
+    padding: 0.55rem 1.3rem;
+    font-size: 0.85rem;
+  }
+  .cv-download-about svg {
+    width: 15px;
+    height: 15px;
+  }
 }
 
 /* ─── Mobile (< 640px) ──────────────────────────────────────── */
@@ -229,48 +286,86 @@
 
   .skills-card {
     /* Placed on the right below the cap/head level so it does not collide with the character */
-    top: 32%;
-    right: 0.5rem;
+    top: 30%;
+    right: 0.4rem;
     left: auto;
     min-width: unset;
   }
   .skills-card figure {
-    width: 122px !important;
-    height: 136px !important;
+    width: 148px !important;
+    height: 158px !important;
   }
   .skills-card .glass-panel {
-    padding: 0.45rem 0.65rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 10px;
+    overflow: visible;
   }
   .skills-card h4 {
-    font-size: 0.82rem;
-    margin-bottom: 0.2rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
   }
   .skills-card ul li {
-    font-size: 0.65rem;
-    padding: 0.05rem 0;
+    font-size: 0.72rem;
+    padding: 0.07rem 0;
+    white-space: nowrap;
+  }
+
+  /* Stack bio card + CV button so they never overlap */
+  .bio-cv-stack {
+    position: absolute;
+    bottom: max(1rem, calc(env(safe-area-inset-bottom, 0px) + 0.75rem));
+    left: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
+    pointer-events: auto;
+  }
+
+  /* Override about-card-wrapper's absolute positioning for children of the stack */
+  .bio-cv-stack > * {
+    position: static !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    opacity: inherit;
   }
 
   .bio-card {
-    top: auto;
-    bottom: max(5%, calc(env(safe-area-inset-bottom, 0px) + 4.2rem));
-    left: 0.75rem;
-    right: 0.75rem;
-    margin: 0 auto;
-    max-width: 380px;
+    margin: 0;
+    max-width: 100%;
   }
+  /* Force the TiltWrapper figure inside bio-card to fill available width */
   .bio-card figure {
     width: 100% !important;
-    max-width: 380px !important;
+    max-width: 100% !important;
     height: auto !important;
-    min-height: 75px !important;
   }
   .bio-card .glass-panel {
-    padding: 0.75rem 1rem;
+    padding: 0.85rem 1rem;
     border-radius: 12px;
+    height: auto !important;
   }
   .bio-card p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .cv-download-about {
+    align-self: center;
+    padding: 0.65rem 1.4rem;
     font-size: 0.82rem;
-    line-height: 1.45;
+    gap: 0.45rem;
+  }
+  .cv-download-about svg {
+    width: 16px;
+    height: 16px;
+  }
+  .cv-download-about:hover {
+    transform: scale(1.03) !important;
   }
 }

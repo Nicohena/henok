@@ -1,10 +1,10 @@
 
 import thumbnailEngida from '../assets/thumbnails/engida.webp'
 import thumbnailGojo from '../assets/thumbnails/gojo.webp'
-import thumbnailGebeta from '../assets/images/projects/pokedex/thumbnail.webp'
+import thumbnailGebeta from '../assets/thumbnails/gebeta.webp'
 import thumbnailMillennium from '../assets/thumbnails/millennium.webp'
-import thumbnailGreenHarvest from '../assets/thumbnails/sharkie.webp'
-import thumbnailSmartCampus from '../assets/thumbnails/campus.webp'
+import thumbnailGreenHarvest from '../assets/thumbnails/greenharvest.webp'
+import thumbnailSmartCampus from '../assets/thumbnails/smart_campus.webp'
 import thumbnailGcode from '../assets/thumbnails/gcode.webp'
 
 export const projects = [

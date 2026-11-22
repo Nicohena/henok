@@ -44,7 +44,7 @@ export default function MainScene({ onProgress, onLoaded }) {
     if (reduceMotion) {
       // Reduced motion: show everything at full opacity, no light rays.
       if (aboutCardsRef.current) {
-        aboutCardsRef.current.querySelectorAll('.about-card-wrapper').forEach((card) => {
+        aboutCardsRef.current.querySelectorAll('.about-card-wrapper, .bio-cv-stack').forEach((card) => {
           card.style.opacity = 1
         })
       }
@@ -54,7 +54,7 @@ export default function MainScene({ onProgress, onLoaded }) {
     }
     // Normal: apply fade based on scroll progress
     if (aboutCardsRef.current) {
-      aboutCardsRef.current.querySelectorAll('.about-card-wrapper').forEach((card) => {
+      aboutCardsRef.current.querySelectorAll('.about-card-wrapper, .bio-cv-stack').forEach((card) => {
         card.style.opacity = progress
       })
     }
@@ -94,20 +94,6 @@ export default function MainScene({ onProgress, onLoaded }) {
             </TiltWrapper>
           </div>
 
-          <div className="about-card-wrapper bio-card">
-            <TiltWrapper
-              containerWidth="280px"
-              containerHeight="170px"
-            >
-              <div className="glass-panel">
-                <p>
-                  Builds immersive 3D web experiences and interactive systems that
-                  are fast, responsive, and fun to use.
-                </p>
-              </div>
-            </TiltWrapper>
-          </div>
-
           <div className="about-card-wrapper skills-card">
             <TiltWrapper
               containerWidth="240px"
@@ -116,14 +102,45 @@ export default function MainScene({ onProgress, onLoaded }) {
               <div className="glass-panel">
                 <h4>Skills</h4>
                 <ul>
-                  <li>Three.js &amp; WebGL</li>
                   <li>React &amp; Next.js</li>
-                  <li>Node.js &amp; Express</li>
+                  <li>Node.js &amp; Nest.js</li>
+                  <li>PostreSQL &amp; MongoDB</li>
                   <li>TypeScript</li>
                   <li>Python &amp; Django</li>
                 </ul>
               </div>
             </TiltWrapper>
+          </div>
+
+          {/* bio-cv-stack: on mobile these are pulled from absolute positioning
+              and stacked as a flex column so the button never covers the bio */}
+          <div className="bio-cv-stack">
+            <div className="about-card-wrapper bio-card">
+              <TiltWrapper
+                containerWidth="280px"
+                containerHeight="auto"
+              >
+                <div className="glass-panel">
+                  <p>
+                    Builds immersive 3D web experiences and interactive systems that
+                    are fast, responsive, and fun to use.
+                  </p>
+                </div>
+              </TiltWrapper>
+            </div>
+
+            <a
+              className="about-card-wrapper cv-download-about"
+              href="/Henok-Kebede-CV.pdf"
+              download="Henok-Kebede-CV.pdf"
+              aria-label="Download CV"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 3v13M7 11l5 5 5-5" />
+                <path d="M4 20h16" />
+              </svg>
+              <span>My CV</span>
+            </a>
           </div>
         </div>
       </div>
