@@ -32,7 +32,7 @@ import items from '../assets/images/projects/pokedex/items.webp'
 import itemdetail from '../assets/images/projects/pokedex/itemdetail.webp'
 import qr from '../assets/images/projects/pokedex/QR.png'
 
-import videoCubewar from '../assets/videos/cubewar.mp4'
+
 
 import studentdashboard from '../assets/images/projects/gcode/studentdashboard.webp'
 import admindashboard from '../assets/images/projects/gcode/admindshboard.webp'
@@ -73,7 +73,7 @@ export const projectDetailsById = {
     { type: 'image', src: Admin, alt: 'Admin dashboard', caption: 'Admin dashboard' },
   ],
   gojo: [
-    { type: 'video', src: videoCubewar, caption: 'Rental marketplace workflow' },
+   
     { type: 'image', src: landingPage, alt: 'Landing page', caption: 'Landing page' },
     { type: 'image', src: chatpage, alt: 'Messenger', caption: 'Messenger' },
     { type: 'image', src: authentication, alt: 'Authentication', caption: 'Authentication' },
