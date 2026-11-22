@@ -1,9 +1,11 @@
 .hero-scroll-hint {
   position: absolute;
-  top: calc(100vh - 5.5rem);
-  top: calc(100dvh - 5.5rem);
-  right: clamp(2rem, 4vw, 4rem);
-  left: auto;
+  top: calc(100vh - 5rem);
+  top: calc(100dvh - 5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
+  bottom: auto;
   z-index: 25;
   display: flex;
   align-items: center;
@@ -26,7 +28,7 @@
 .hero-scroll-hint.is-hidden {
   opacity: 0;
   visibility: hidden;
-  transform: translateY(12px);
+  transform: translateX(-50%) translateY(12px);
 }
 
 /* Mouse outline */
@@ -78,19 +80,18 @@
 /* Gentle hint float */
 @keyframes hintFloat {
   0%, 100% {
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
   50% {
-    transform: translateY(6px);
+    transform: translateX(-50%) translateY(6px);
   }
 }
 
-/* Mobile positioning */
+/* Mobile — keep centred, tighten the top offset */
 @media (max-width: 639px) {
   .hero-scroll-hint {
-    right: 1.25rem;
-    top: calc(100vh - 5.5rem);
-    top: calc(100dvh - 5.5rem);
+    top: calc(100vh - 7rem);
+    top: calc(100dvh - 7rem);
   }
 
   .mouse-indicator {
