@@ -22,7 +22,7 @@ import certificate from '../assets/images/projects/quibbo/certificates_and_achei
 import discussion from '../assets/images/projects/quibbo/disussion.webp'
 import messages from '../assets/images/projects/quibbo/messages.webp'
 
-
+import adminOverview from '../assets/images/projects/sharkie/Admindash.webp'
 import sellerDashboard from '../assets/images/projects/sharkie/seller_dashboard.webp'
 import storeDecoration from '../assets/images/projects/sharkie/store_decoration.webp'
 
@@ -108,6 +108,14 @@ export const projectDetailsById = {
     { type: 'image', src: gcodecertificate, alt: 'Certificate', caption: 'Certificate', fit: 'contain', aspectRatio: '1073 / 708' },
   ],
   'green-harvest': [
+    {
+        type: 'image',
+      src: adminOverview,
+      alt: 'Admin dashboard & business performance',
+      caption: 'Admin dashboard & business performance',
+      fit: 'contain',
+      aspectRatio: '1919 / 938'
+    },
     {
       type: 'image',
       src: sellerDashboard,
