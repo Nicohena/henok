@@ -180,12 +180,12 @@ export default function SceneContent({ reduceMotion = false }) {
     const talkingAction = talkingActionRef.current
 
     if (typingAction && talkingAction) {
-      if (t > 0.6 && !talkingAction.isRunning()) {
+      if (t > 0.08 && !talkingAction.isRunning()) {
         talkingAction.reset().play()
-        typingAction.crossFadeTo(talkingAction, 0.5, true)
-      } else if (t < 0.4 && !typingAction.isRunning()) {
+        typingAction.crossFadeTo(talkingAction, 0.35, true)
+      } else if (t < 0.03 && !typingAction.isRunning()) {
         typingAction.reset().play()
-        talkingAction.crossFadeTo(typingAction, 0.5, true)
+        talkingAction.crossFadeTo(typingAction, 0.35, true)
       }
     }
   })
